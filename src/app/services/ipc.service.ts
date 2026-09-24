@@ -1,11 +1,11 @@
 import { Injectable, signal } from '@angular/core';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class IpcService {
   private readonly STORAGE_KEY = 'casa_suba_ipc_rate';
-  private readonly DEFAULT_IPC = 5.2; // Default reference IPC %
+  private readonly DEFAULT_IPC = 5.1; // Default reference IPC %
 
   // Signal for reactive IPC state
   public readonly ipcRate = signal<number>(this.loadInitialIpc());

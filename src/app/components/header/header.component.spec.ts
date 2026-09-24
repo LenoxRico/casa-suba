@@ -9,13 +9,13 @@ describe('HeaderComponent Modal Behavior', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HeaderComponent]
+      imports: [HeaderComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(HeaderComponent);
     component = fixture.componentInstance;
     ipcService = TestBed.inject(IpcService);
-    ipcService.updateIpcRate(5.2, false);
+    ipcService.updateIpcRate(5.1, false);
     fixture.detectChanges();
   });
 
@@ -23,7 +23,7 @@ describe('HeaderComponent Modal Behavior', () => {
     expect(component.showIpcModal).toBe(false);
     component.openIpcModal();
     expect(component.showIpcModal).toBe(true);
-    expect(component.tempIpcValue).toBe(5.2);
+    expect(component.tempIpcValue).toBe(5.1);
   });
 
   it('should discard draft changes when closing modal (Cancelar / X)', () => {
@@ -32,7 +32,7 @@ describe('HeaderComponent Modal Behavior', () => {
     component.closeIpcModal();
 
     expect(component.showIpcModal).toBe(false);
-    expect(ipcService.ipcRate()).toBe(5.2); // Original value retained!
+    expect(ipcService.ipcRate()).toBe(5.1); // Original value retained!
   });
 
   it('should commit IPC rate when saveIpc is called (Guardar IPC)', () => {
