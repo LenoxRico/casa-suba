@@ -1,0 +1,60 @@
+<main class="app-layout">
+  <!-- Header Component -->
+  <app-header></app-header>
+
+  <!-- Dashboard Main Content Container -->
+  <div class="dashboard-content">
+    <!-- Navigation Tabs Bar -->
+    <nav class="dashboard-nav glass-panel-light">
+      <button
+        class="nav-tab-btn"
+        [class.active]="activeTab() === 'canon'"
+        (click)="setTab('canon')"
+      >
+        <span class="tab-icon">📈</span>
+        <span class="tab-text">Incremento Canon (IPC)</span>
+      </button>
+
+      <button
+        class="nav-tab-btn"
+        [class.active]="activeTab() === 'utilities'"
+        (click)="setTab('utilities')"
+      >
+        <span class="tab-icon">⚡</span>
+        <span class="tab-text">Servicios Públicos (Agua, Energía, Gas)</span>
+      </button>
+
+      <button
+        class="nav-tab-btn"
+        [class.active]="activeTab() === 'overview'"
+        (click)="setTab('overview')"
+      >
+        <span class="tab-icon">🏢</span>
+        <span class="tab-text">Resumen de Propiedad</span>
+      </button>
+    </nav>
+
+    <!-- Tab Content Switcher -->
+    @switch (activeTab()) {
+      @case ('canon') {
+        <app-canon-calculator></app-canon-calculator>
+      }
+      @case ('utilities') {
+        <app-utilities-calculator></app-utilities-calculator>
+      }
+      @case ('overview') {
+        <app-property-overview></app-property-overview>
+      }
+    }
+  </div>
+
+  <!-- Glass Footer -->
+  <footer class="app-footer glass-panel-light">
+    <div class="footer-content">
+      <p>
+        Casa Suba • Sistema de Administración de Inmuebles (3 Locales Comerciales & 3 Apartamentos)
+      </p>
+      <span class="footer-tag font-mono">Marlen Rico Florido</span>
+    </div>
+  </footer>
+</main>

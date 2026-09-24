@@ -1,0 +1,646 @@
+<div class="calculator-card glass-panel animate-fade-in">
+  <!-- Card Header -->
+  <div class="card-header">
+    <div class="header-title-box">
+      <div class="icon-badge cyan-glow">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+        </svg>
+      </div>
+      <div>
+        <h2 class="section-title">2. Distribución de Servicios Públicos</h2>
+        <p class="section-subtitle">
+          Calcula de forma exacta lo que corresponde a cada apartamento en Energía, Agua y Gas
+        </p>
+      </div>
+    </div>
+    <span class="glass-badge badge-cyan">Servicios</span>
+  </div>
+
+  <!-- Service Selector Tabs -->
+  <div class="service-tabs">
+    <button
+      class="tab-btn"
+      [class.active]="activeService === 'energy'"
+      (click)="selectService('energy')"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+      </svg>
+      ⚡ Energía Electricidad
+    </button>
+    <button
+      class="tab-btn"
+      [class.active]="activeService === 'water'"
+      (click)="selectService('water')"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
+      </svg>
+      💧 Agua Potable
+    </button>
+    <button class="tab-btn" [class.active]="activeService === 'gas'" (click)="selectService('gas')">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path
+          d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"
+        />
+      </svg>
+      🔥 Gas Natural
+    </button>
+  </div>
+
+  <!-- TAB 1: ENERGÍA ELECTRICIDAD -->
+  @if (activeService === 'energy') {
+    <div class="calculator-grid animate-fade-in">
+      <div class="inputs-section">
+        <div class="service-intro-box">
+          <p>
+            El recibo de energía es compartido por los 3 apartamentos (Apto 2, Apto 3 y Apto 4).
+            Apto 3 y Apto 4 poseen medidores de kWh independientes. Restando ambos del total se
+            obtiene el consumo del Apto 2.
+          </p>
+        </div>
+
+        <!-- Total Energy Bill -->
+        <div class="glass-input-group">
+          <label for="energyBill">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <line x1="12" y1="1" x2="12" y2="23" />
+              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+            </svg>
+            Valor Total de la Factura de Energía ($ COP):
+          </label>
+          <div class="glass-input-wrapper">
+            <span class="input-prefix">$</span>
+            <input
+              id="energyBill"
+              type="number"
+              class="glass-input has-prefix"
+              placeholder="Ej. 250,000"
+              [(ngModel)]="energyTotalBill"
+              (keyup.enter)="calculateEnergy(true)"
+            />
+          </div>
+        </div>
+
+        <!-- Price per kWh -->
+        <div class="glass-input-group">
+          <label for="energyPrice">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <path d="M12 6v6l4 2" />
+            </svg>
+            Precio del Kilovatio ($ / kWh):
+          </label>
+          <div class="glass-input-wrapper">
+            <span class="input-prefix">$</span>
+            <input
+              id="energyPrice"
+              type="number"
+              class="glass-input has-prefix"
+              placeholder="Ej. 850"
+              [(ngModel)]="energyPricePerKwh"
+              (keyup.enter)="calculateEnergy(true)"
+            />
+          </div>
+        </div>
+
+        <!-- Apt 3 kWh meter -->
+        <div class="glass-input-group">
+          <label for="apt3Meter">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M3 3v18h18" />
+              <path d="M18 17V9" />
+              <path d="M13 17V5" />
+              <path d="M8 17v-3" />
+            </svg>
+            Consumo Apto 3 / 3er Piso (kWh):
+          </label>
+          <div class="glass-input-wrapper">
+            <input
+              id="apt3Meter"
+              type="number"
+              class="glass-input has-suffix"
+              placeholder="Ej. 110"
+              [(ngModel)]="energyApt3Kwh"
+              (keyup.enter)="calculateEnergy(true)"
+            />
+            <span class="input-suffix">kWh</span>
+          </div>
+        </div>
+
+        <!-- Apt 4 kWh meter -->
+        <div class="glass-input-group">
+          <label for="apt4Meter">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M3 3v18h18" />
+              <path d="M18 17V9" />
+              <path d="M13 17V5" />
+              <path d="M8 17v-3" />
+            </svg>
+            Consumo Apto 4 / 4to Piso (kWh):
+          </label>
+          <div class="glass-input-wrapper">
+            <input
+              id="apt4Meter"
+              type="number"
+              class="glass-input has-suffix"
+              placeholder="Ej. 95"
+              [(ngModel)]="energyApt4Kwh"
+              (keyup.enter)="calculateEnergy(true)"
+            />
+            <span class="input-suffix">kWh</span>
+          </div>
+        </div>
+
+        @if (energyError) {
+          <div class="error-banner">⚠️ {{ energyError }}</div>
+        }
+
+        <button class="glass-btn btn-cyan btn-full" (click)="calculateEnergy(true)">
+          ⚡ Calcular Distribución de Energía
+        </button>
+      </div>
+
+      <!-- Results section -->
+      <div class="results-section">
+        @if (energyResult) {
+          <div class="results-container animate-fade-in">
+            <div class="summary-hero-bar glass-panel-light">
+              <div class="hero-item">
+                <span class="hero-label">FACTURA TOTAL</span>
+                <span class="hero-value">{{ formatMoney(energyResult.totalBill) }}</span>
+              </div>
+              <div class="hero-divider"></div>
+              <div class="hero-item">
+                <span class="hero-label">CONSUMO TOTAL</span>
+                <span class="hero-value">{{ energyResult.totalKwh.toFixed(1) }} kWh</span>
+              </div>
+              <div class="hero-divider"></div>
+              <div class="hero-item">
+                <span class="hero-label">PRECIO KWH</span>
+                <span class="hero-value">${{ energyResult.pricePerKwh }}/kWh</span>
+              </div>
+            </div>
+
+            <h3 class="breakdown-title">Distribución por Apartamento:</h3>
+
+            <div class="units-cards-stack">
+              <!-- Apt 2 -->
+              <div class="unit-result-card glass-panel apt-2">
+                <div class="unit-header">
+                  <div class="unit-title-group">
+                    <span class="unit-tag">Piso 2</span>
+                    <h4>Apartamento 2</h4>
+                  </div>
+                  <span class="unit-calculated-badge">Calculado por Resta</span>
+                </div>
+                <div class="unit-body">
+                  <div class="unit-stat">
+                    <span class="stat-label">Consumo Estimado:</span>
+                    <span class="stat-kwh">{{ energyResult.apt2Kwh.toFixed(1) }} kWh</span>
+                    <span class="stat-percent"
+                      >({{
+                        getEnergySharePercent(energyResult.apt2Kwh, energyResult.totalKwh)
+                      }})</span
+                    >
+                  </div>
+                  <div class="unit-cost">
+                    <span class="cost-label">TOTAL A PAGAR:</span>
+                    <span class="cost-value">{{ formatMoney(energyResult.apt2Cost) }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Apt 3 -->
+              <div class="unit-result-card glass-panel apt-3">
+                <div class="unit-header">
+                  <div class="unit-title-group">
+                    <span class="unit-tag">Piso 3</span>
+                    <h4>Apartamento 3</h4>
+                  </div>
+                  <span class="unit-meter-badge">Medidor Independiente</span>
+                </div>
+                <div class="unit-body">
+                  <div class="unit-stat">
+                    <span class="stat-label">Consumo Medido:</span>
+                    <span class="stat-kwh">{{ energyResult.apt3Kwh.toFixed(1) }} kWh</span>
+                    <span class="stat-percent"
+                      >({{
+                        getEnergySharePercent(energyResult.apt3Kwh, energyResult.totalKwh)
+                      }})</span
+                    >
+                  </div>
+                  <div class="unit-cost">
+                    <span class="cost-label">TOTAL A PAGAR:</span>
+                    <span class="cost-value">{{ formatMoney(energyResult.apt3Cost) }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Apt 4 -->
+              <div class="unit-result-card glass-panel apt-4">
+                <div class="unit-header">
+                  <div class="unit-title-group">
+                    <span class="unit-tag">Piso 4</span>
+                    <h4>Apartamento 4</h4>
+                  </div>
+                  <span class="unit-meter-badge">Medidor Independiente</span>
+                </div>
+                <div class="unit-body">
+                  <div class="unit-stat">
+                    <span class="stat-label">Consumo Medido:</span>
+                    <span class="stat-kwh">{{ energyResult.apt4Kwh.toFixed(1) }} kWh</span>
+                    <span class="stat-percent"
+                      >({{
+                        getEnergySharePercent(energyResult.apt4Kwh, energyResult.totalKwh)
+                      }})</span
+                    >
+                  </div>
+                  <div class="unit-cost">
+                    <span class="cost-label">TOTAL A PAGAR:</span>
+                    <span class="cost-value">{{ formatMoney(energyResult.apt4Cost) }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+  <!-- TAB 2: AGUA POTABLE -->
+  @if (activeService === 'water') {
+    <div class="calculator-grid animate-fade-in">
+      <div class="inputs-section">
+        <div class="service-intro-box">
+          <p>
+            El agua se cobra por número de residentes. Primero se descuenta la cuota total fija
+            asignada a los 3 locales comerciales (se divide entre 3). La diferencia restante se
+            divide por persona entre los apartamentos.
+          </p>
+        </div>
+
+        <!-- Total Water Bill -->
+        <div class="glass-input-group">
+          <label for="waterBill">Valor Total Factura de Agua ($ COP):</label>
+          <div class="glass-input-wrapper">
+            <span class="input-prefix">$</span>
+            <input
+              id="waterBill"
+              type="number"
+              class="glass-input has-prefix"
+              placeholder="Ej. 180,000"
+              [(ngModel)]="waterTotalBill"
+              (keyup.enter)="calculateWater(true)"
+            />
+          </div>
+        </div>
+
+        <!-- Total Commercial Stores Charge -->
+        <div class="glass-input-group">
+          <label for="waterCommercial">Valor Fijo Total para Locales Comerciales ($ COP):</label>
+          <div class="glass-input-wrapper">
+            <span class="input-prefix">$</span>
+            <input
+              id="waterCommercial"
+              type="number"
+              class="glass-input has-prefix"
+              placeholder="Ej. 30,000"
+              [(ngModel)]="waterCommercialTotal"
+              (keyup.enter)="calculateWater(true)"
+            />
+          </div>
+          <span class="input-help-text"
+            >Este total se dividirá por 3 (cobro igual para Local 1, Local 2 y Local 3)</span
+          >
+        </div>
+
+        <h4 class="sub-form-title">Número de Personas por Apartamento:</h4>
+
+        <div class="people-inputs-grid">
+          <!-- Apt 2 People -->
+          <div class="glass-input-group">
+            <label for="apt2People">Apto 2:</label>
+            <div class="glass-input-wrapper">
+              <input
+                id="apt2People"
+                type="number"
+                min="0"
+                class="glass-input has-suffix"
+                [(ngModel)]="waterApt2People"
+                (keyup.enter)="calculateWater(true)"
+              />
+              <span class="input-suffix">pers.</span>
+            </div>
+          </div>
+
+          <!-- Apt 3 People -->
+          <div class="glass-input-group">
+            <label for="apt3People">Apto 3:</label>
+            <div class="glass-input-wrapper">
+              <input
+                id="apt3People"
+                type="number"
+                min="0"
+                class="glass-input has-suffix"
+                [(ngModel)]="waterApt3People"
+                (keyup.enter)="calculateWater(true)"
+              />
+              <span class="input-suffix">pers.</span>
+            </div>
+          </div>
+
+          <!-- Apt 4 People -->
+          <div class="glass-input-group">
+            <label for="apt4People">Apto 4:</label>
+            <div class="glass-input-wrapper">
+              <input
+                id="apt4People"
+                type="number"
+                min="0"
+                class="glass-input has-suffix"
+                [(ngModel)]="waterApt4People"
+                (keyup.enter)="calculateWater(true)"
+              />
+              <span class="input-suffix">pers.</span>
+            </div>
+          </div>
+        </div>
+
+        @if (waterError) {
+          <div class="error-banner">⚠️ {{ waterError }}</div>
+        }
+
+        <button class="glass-btn btn-cyan btn-full" (click)="calculateWater(true)">
+          💧 Calcular Distribución de Agua
+        </button>
+      </div>
+
+      <!-- Results Section -->
+      <div class="results-section">
+        @if (waterResult) {
+          <div class="results-container animate-fade-in">
+            <div class="summary-hero-bar glass-panel-light">
+              <div class="hero-item">
+                <span class="hero-label">FACTURA AGUA</span>
+                <span class="hero-value">{{ formatMoney(waterResult.totalBill) }}</span>
+              </div>
+              <div class="hero-divider"></div>
+              <div class="hero-item">
+                <span class="hero-label">VALOR / PERSONA</span>
+                <span class="hero-value highlight-cyan">{{
+                  formatMoney(waterResult.costPerPerson)
+                }}</span>
+              </div>
+              <div class="hero-divider"></div>
+              <div class="hero-item">
+                <span class="hero-label">TOTAL PERSONAS</span>
+                <span class="hero-value">{{ waterResult.totalPeople }} pers.</span>
+              </div>
+            </div>
+
+            <!-- Commercial Stores Breakdown -->
+            <div class="commercial-summary-box glass-panel">
+              <div class="comm-header">
+                <span class="comm-title">🏬 Locales Comerciales (3 Locales)</span>
+                <span class="comm-total-badge"
+                  >{{ formatMoney(waterResult.commercialTotal) }} Total</span
+                >
+              </div>
+              <p class="comm-desc">Dividido en partes iguales por 3:</p>
+              <div class="comm-stores-grid">
+                <div class="store-chip">
+                  Local 1: <strong>{{ formatMoney(waterResult.commercialPerStore) }}</strong>
+                </div>
+                <div class="store-chip">
+                  Local 2: <strong>{{ formatMoney(waterResult.commercialPerStore) }}</strong>
+                </div>
+                <div class="store-chip">
+                  Local 3: <strong>{{ formatMoney(waterResult.commercialPerStore) }}</strong>
+                </div>
+              </div>
+            </div>
+
+            <h3 class="breakdown-title">Distribución Residencial por Apartamento:</h3>
+
+            <div class="units-cards-stack">
+              <!-- Apt 2 -->
+              <div class="unit-result-card glass-panel">
+                <div class="unit-header">
+                  <h4>Apartamento 2 (Piso 2)</h4>
+                  <span class="unit-people-badge">{{ waterResult.apt2People }} Residentes</span>
+                </div>
+                <div class="unit-body">
+                  <div class="unit-stat">
+                    <span class="stat-label">Cálculo:</span>
+                    <span
+                      >{{ waterResult.apt2People }} pers. ×
+                      {{ formatMoney(waterResult.costPerPerson) }}</span
+                    >
+                  </div>
+                  <div class="unit-cost">
+                    <span class="cost-label">TOTAL A PAGAR:</span>
+                    <span class="cost-value">{{ formatMoney(waterResult.apt2Cost) }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Apt 3 -->
+              <div class="unit-result-card glass-panel">
+                <div class="unit-header">
+                  <h4>Apartamento 3 (Piso 3)</h4>
+                  <span class="unit-people-badge">{{ waterResult.apt3People }} Residentes</span>
+                </div>
+                <div class="unit-body">
+                  <div class="unit-stat">
+                    <span class="stat-label">Cálculo:</span>
+                    <span
+                      >{{ waterResult.apt3People }} pers. ×
+                      {{ formatMoney(waterResult.costPerPerson) }}</span
+                    >
+                  </div>
+                  <div class="unit-cost">
+                    <span class="cost-label">TOTAL A PAGAR:</span>
+                    <span class="cost-value">{{ formatMoney(waterResult.apt3Cost) }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Apt 4 -->
+              <div class="unit-result-card glass-panel">
+                <div class="unit-header">
+                  <h4>Apartamento 4 (Piso 4)</h4>
+                  <span class="unit-people-badge">{{ waterResult.apt4People }} Residentes</span>
+                </div>
+                <div class="unit-body">
+                  <div class="unit-stat">
+                    <span class="stat-label">Cálculo:</span>
+                    <span
+                      >{{ waterResult.apt4People }} pers. ×
+                      {{ formatMoney(waterResult.costPerPerson) }}</span
+                    >
+                  </div>
+                  <div class="unit-cost">
+                    <span class="cost-label">TOTAL A PAGAR:</span>
+                    <span class="cost-value">{{ formatMoney(waterResult.apt4Cost) }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+  <!-- TAB 3: GAS NATURAL -->
+  @if (activeService === 'gas') {
+    <div class="calculator-grid animate-fade-in">
+      <div class="inputs-section">
+        <div class="service-intro-box">
+          <p>El servicio de gas se divide en 2 partes iguales (50% cada una).</p>
+        </div>
+
+        <div class="glass-input-group">
+          <label for="gasBill">Valor Total Factura de Gas ($ COP):</label>
+          <div class="glass-input-wrapper">
+            <span class="input-prefix">$</span>
+            <input
+              id="gasBill"
+              type="number"
+              class="glass-input has-prefix"
+              placeholder="Ej. 60,000"
+              [(ngModel)]="gasTotalBill"
+              (keyup.enter)="calculateGas(true)"
+            />
+          </div>
+        </div>
+
+        <button class="glass-btn btn-amber btn-full" (click)="calculateGas(true)">
+          🔥 Calcular División de Gas
+        </button>
+      </div>
+
+      <!-- Results section -->
+      <div class="results-section">
+        @if (gasResult) {
+          <div class="results-container animate-fade-in">
+            <div class="summary-hero-bar glass-panel-light">
+              <div class="hero-item">
+                <span class="hero-label">FACTURA TOTAL GAS</span>
+                <span class="hero-value">{{ formatMoney(gasResult.totalBill) }}</span>
+              </div>
+              <div class="hero-divider"></div>
+              <div class="hero-item">
+                <span class="hero-label">VALOR POR PARTE (1/2)</span>
+                <span class="hero-value highlight-amber">{{
+                  formatMoney(gasResult.shareAmount)
+                }}</span>
+              </div>
+            </div>
+
+            <div class="gas-shares-grid">
+              <div class="gas-share-card glass-panel">
+                <div class="share-badge">Parte 1 (50%)</div>
+                <div class="share-amount">{{ formatMoney(gasResult.shareAmount) }}</div>
+                <span class="share-note"
+                  >Mitad correspondiente a la primera cuota / apartamento habilitado</span
+                >
+              </div>
+
+              <div class="gas-share-card glass-panel">
+                <div class="share-badge">Parte 2 (50%)</div>
+                <div class="share-amount">{{ formatMoney(gasResult.shareAmount) }}</div>
+                <span class="share-note"
+                  >Mitad correspondiente a la segunda cuota / apartamento habilitado</span
+                >
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>

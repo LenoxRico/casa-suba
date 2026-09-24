@@ -1,0 +1,67 @@
+<div class="overview-container animate-fade-in">
+  <!-- Unit Inventory Cards Grid -->
+  <div class="overview-header-title">
+    <h3>🏢 Directorio de Unidades en Casa Suba</h3>
+    <p>Resumen de las 6 unidades inmobiliarias registradas en la propiedad</p>
+  </div>
+
+  <div class="units-grid">
+    @for (unit of units; track unit.id) {
+      <div class="unit-card glass-panel" [class.commercial-border]="unit.type === 'commercial'">
+        <div class="card-top">
+          <span class="unit-type-chip" [class.commercial]="unit.type === 'commercial'">
+            {{ unit.type === 'commercial' ? 'Local Comercial' : 'Residencial' }}
+          </span>
+          <span class="unit-floor-badge">{{ unit.floor }}</span>
+        </div>
+        <h4 class="unit-name">{{ unit.name }}</h4>
+        <p class="tenant-name">Occupant / Ref: {{ unit.defaultTenant }}</p>
+      </div>
+    }
+  </div>
+
+  <!-- History Log Section -->
+  <div class="history-section glass-panel">
+    <div class="history-header">
+      <div class="history-title-box">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <h4>Historial Reciente de Cálculos</h4>
+      </div>
+      @if (calculatorService.history().length > 0) {
+        <button class="glass-btn btn-sm" (click)="clearHistory()">
+          Limpiar Historial
+        </button>
+      }
+    </div>
+
+    @if (calculatorService.history().length > 0) {
+      <div class="history-list">
+        @for (item of calculatorService.history(); track item.id; let idx = $index) {
+          <div class="history-item">
+            <div class="history-left">
+              <span class="history-type-dot" [class]="item.type"></span>
+              <div class="history-meta">
+                <span class="history-item-title">{{ item.title }}</span>
+                <span class="history-item-date">{{ item.date | date:'dd/MM/yyyy, hh:mm a' }}</span>
+              </div>
+            </div>
+            <div class="history-right">
+              <span class="history-details">{{ item.details }}</span>
+              <button 
+                class="copy-btn" 
+                (click)="copyToClipboard(item.details, idx)"
+                title="Copiar detalles al portapapeles"
+              >
+                {{ copiedItemIndex === idx ? '✓ Copiado' : '📋' }}
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+    } @else {
+      <div class="empty-history">
+        <p>Aún no has realizado cálculos en esta sesión. Los cálculos realizados de Canon, Energía, Agua o Gas aparecerán aquí automáticamente.</p>
+      </div>
+    }
+  </div>
+</div>
