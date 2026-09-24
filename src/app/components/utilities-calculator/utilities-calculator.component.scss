@@ -49,11 +49,14 @@
   margin-top: 0.2rem;
 }
 
-/* Service Selector Tabs */
-.service-tabs {
+/* Service Selector Tabs Container */
+.service-tabs-container {
+  margin-bottom: 2rem;
+}
+
+.service-tabs-desktop {
   display: flex;
   gap: 0.75rem;
-  margin-bottom: 2rem;
   overflow-x: auto;
   padding-bottom: 0.5rem;
 
@@ -87,6 +90,38 @@
   }
 }
 
+.service-tabs-mobile {
+  display: none;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  .mobile-service-label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--accent-cyan);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .mobile-service-select {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    background: rgba(6, 182, 212, 0.12);
+    border: 1px solid rgba(6, 182, 212, 0.4);
+    border-radius: var(--radius-md);
+    color: #ffffff;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+
+    option {
+      background: #0f172a;
+      color: #ffffff;
+    }
+  }
+}
+
 .calculator-grid {
   display: grid;
   grid-template-columns: 1fr 1.15fr;
@@ -109,9 +144,14 @@
 }
 
 .input-help-text {
-  font-size: 0.75rem;
+  font-size: 0.78rem;
   color: var(--text-muted);
-  margin-top: 0.25rem;
+  margin-top: 0.35rem;
+  display: block;
+
+  strong {
+    color: var(--accent-cyan);
+  }
 }
 
 .sub-form-title {
@@ -398,7 +438,15 @@
   }
 }
 
-@media (max-width: 868px) {
+@media (max-width: 768px) {
+  .service-tabs-desktop {
+    display: none;
+  }
+
+  .service-tabs-mobile {
+    display: flex;
+  }
+
   .calculator-grid {
     grid-template-columns: 1fr;
   }

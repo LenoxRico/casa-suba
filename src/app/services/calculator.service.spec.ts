@@ -35,9 +35,20 @@ describe('CalculatorService', () => {
     expect(service.history()[0].type).toBe('energy');
   });
 
-  it('should calculate Water split correctly and add history only when saveHistory = true', () => {
-    const result = service.calculateWater(150000, 30000, 2, 3, 1, true);
+  it('should calculate Water split taking single store charge and multiplying by 3 internally', () => {
+    // Total bill: 150,000 COP, Charge for 1 single store: 10,000 COP -> Total 3 stores: 30,000 COP
+    // Residential pool: 120,000 COP
+    // Apt 2: 2 people, Apt 3: 3 people, Apt 4: 1 person -> Total 6 residents
+    // Cost per person: 120,000 / 6 = 20,000 COP
+    const result = service.calculateWater(150000, 10000, 2, 3, 1, true);
+    expect(result.commercialPerStore).toBe(10000);
+    expect(result.commercialTotal).toBe(30000);
+    expect(result.residentialPool).toBe(120000);
+    expect(result.totalPeople).toBe(6);
     expect(result.costPerPerson).toBe(20000);
+    expect(result.apt2Cost).toBe(40000);
+    expect(result.apt3Cost).toBe(60000);
+    expect(result.apt4Cost).toBe(20000);
     expect(service.history().length).toBe(1);
     expect(service.history()[0].type).toBe('water');
   });

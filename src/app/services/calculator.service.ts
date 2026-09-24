@@ -102,22 +102,24 @@ export class CalculatorService {
   }
 
   // --- Water Calculation ---
+  // Input: commercialPerStore is the fixed value charged to 1 SINGLE commercial store.
+  // Internally multiplied by 3 for the total of the 3 commercial stores.
   public calculateWater(
     totalBill: number,
-    commercialTotal: number,
+    commercialPerStore: number,
     apt2People: number,
     apt3People: number,
     apt4People: number,
     saveHistory: boolean = false
   ): WaterCalculation {
     const bill = Math.max(0, totalBill);
-    const commTotal = Math.max(0, Math.min(bill, commercialTotal));
+    const perStore = Math.max(0, commercialPerStore);
+    const commercialTotal = Math.min(bill, perStore * 3); // Total for 3 commercial stores combined
     const p2 = Math.max(0, apt2People);
     const p3 = Math.max(0, apt3People);
     const p4 = Math.max(0, apt4People);
 
-    const commercialPerStore = Math.round(commTotal / 3);
-    const residentialPool = Math.max(0, bill - commTotal);
+    const residentialPool = Math.max(0, bill - commercialTotal);
     const totalPeople = p2 + p3 + p4;
 
     const costPerPerson = totalPeople > 0 ? residentialPool / totalPeople : 0;
@@ -128,8 +130,8 @@ export class CalculatorService {
 
     const result: WaterCalculation = {
       totalBill: bill,
-      commercialTotal: commTotal,
-      commercialPerStore,
+      commercialTotal,
+      commercialPerStore: perStore,
       residentialPool,
       apt2People: p2,
       apt3People: p3,
@@ -148,7 +150,7 @@ export class CalculatorService {
         type: 'water',
         title: 'Servicio de Agua',
         date: new Date(),
-        details: `Total: ${this.formatCurrency(bill)} | Locales (c/u): ${this.formatCurrency(commercialPerStore)} | Apt 2 (${p2}p): ${this.formatCurrency(apt2Cost)} | Apt 3 (${p3}p): ${this.formatCurrency(apt3Cost)} | Apt 4 (${p4}p): ${this.formatCurrency(apt4Cost)}`
+        details: `Total: ${this.formatCurrency(bill)} | Cuota Local (c/u): ${this.formatCurrency(perStore)} (Total 3 Locales: ${this.formatCurrency(commercialTotal)}) | Apt 2 (${p2}p): ${this.formatCurrency(apt2Cost)} | Apt 3 (${p3}p): ${this.formatCurrency(apt3Cost)} | Apt 4 (${p4}p): ${this.formatCurrency(apt4Cost)}`
       });
     }
 

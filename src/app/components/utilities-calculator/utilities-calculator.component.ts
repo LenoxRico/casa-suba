@@ -32,7 +32,7 @@ export class UtilitiesCalculatorComponent {
 
   // --- Water Form Inputs ---
   public waterTotalBill: number | null = 180000;
-  public waterCommercialTotal: number | null = 30000;
+  public waterCommercialPerStore: number | null = 10000; // Value for ONE single store (multiplied by 3 internally)
   public waterApt2People: number | null = 2;
   public waterApt3People: number | null = 3;
   public waterApt4People: number | null = 1;
@@ -96,9 +96,10 @@ export class UtilitiesCalculatorComponent {
       this.waterError = 'Ingrese un valor total válido para el recibo de agua.';
       return;
     }
-    const comm = this.waterCommercialTotal || 0;
-    if (comm > this.waterTotalBill) {
-      this.waterError = 'El cobro a los locales no puede ser mayor que el total de la factura de agua.';
+    const perStore = this.waterCommercialPerStore || 0;
+    const commTotal = perStore * 3;
+    if (commTotal > this.waterTotalBill) {
+      this.waterError = `El cobro total a los 3 locales (${this.formatMoney(commTotal)}) supera el total de la factura de agua (${this.formatMoney(this.waterTotalBill)}).`;
       return;
     }
 
@@ -114,7 +115,7 @@ export class UtilitiesCalculatorComponent {
 
     this.waterResult = this.calculatorService.calculateWater(
       this.waterTotalBill,
-      comm,
+      perStore,
       p2,
       p3,
       p4,

@@ -4,34 +4,55 @@
 
   <!-- Dashboard Main Content Container -->
   <div class="dashboard-content">
-    <!-- Navigation Tabs Bar -->
+    <!-- Navigation Tabs Bar (Desktop Buttons + Mobile Dropdown Select) -->
     <nav class="dashboard-nav glass-panel-light">
-      <button
-        class="nav-tab-btn"
-        [class.active]="activeTab() === 'canon'"
-        (click)="setTab('canon')"
-      >
-        <span class="tab-icon">📈</span>
-        <span class="tab-text">Incremento Canon (IPC)</span>
-      </button>
+      <!-- Desktop Tab Buttons -->
+      <div class="nav-tabs-desktop">
+        <button
+          class="nav-tab-btn"
+          [class.active]="activeTab() === 'canon'"
+          (click)="setTab('canon')"
+        >
+          <span class="tab-icon">📈</span>
+          <span class="tab-text">1. Incremento Canon (IPC)</span>
+        </button>
 
-      <button
-        class="nav-tab-btn"
-        [class.active]="activeTab() === 'utilities'"
-        (click)="setTab('utilities')"
-      >
-        <span class="tab-icon">⚡</span>
-        <span class="tab-text">Servicios Públicos (Agua, Energía, Gas)</span>
-      </button>
+        <button
+          class="nav-tab-btn"
+          [class.active]="activeTab() === 'utilities'"
+          (click)="setTab('utilities')"
+        >
+          <span class="tab-icon">⚡</span>
+          <span class="tab-text">2. Servicios Públicos (Agua, Energía, Gas)</span>
+        </button>
 
-      <button
-        class="nav-tab-btn"
-        [class.active]="activeTab() === 'overview'"
-        (click)="setTab('overview')"
-      >
-        <span class="tab-icon">🏢</span>
-        <span class="tab-text">Resumen de Propiedad</span>
-      </button>
+        <button
+          class="nav-tab-btn"
+          [class.active]="activeTab() === 'overview'"
+          (click)="setTab('overview')"
+        >
+          <span class="tab-icon">🏢</span>
+          <span class="tab-text">3. Resumen de Propiedad</span>
+        </button>
+      </div>
+
+      <!-- Mobile Dropdown Selector for optimal view on smaller screens -->
+      <div class="nav-tabs-mobile">
+        <label for="mobileMainTabSelect" class="mobile-main-nav-label">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+          Navegación de Funcionalidades:
+        </label>
+        <select
+          id="mobileMainTabSelect"
+          class="glass-input mobile-main-tab-select"
+          [ngModel]="activeTab()"
+          (ngModelChange)="setTab($event)"
+        >
+          <option value="canon">📈 1. Incremento Canon (IPC)</option>
+          <option value="utilities">⚡ 2. Servicios Públicos (Agua, Energía, Gas)</option>
+          <option value="overview">🏢 3. Resumen de Propiedad</option>
+        </select>
+      </div>
     </nav>
 
     <!-- Tab Content Switcher -->
