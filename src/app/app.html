@@ -1,81 +1,149 @@
 <main class="app-layout">
-  <!-- Header Component -->
+  <!-- Minimalist Header Component -->
   <app-header></app-header>
 
   <!-- Dashboard Main Content Container -->
   <div class="dashboard-content">
-    <!-- Navigation Tabs Bar (Desktop Buttons + Mobile Dropdown Select) -->
+    <!-- Minimalist Property Status Strip -->
+    <div class="dashboard-quick-stats">
+      <div class="stat-item">
+        <span class="stat-label">Inmueble</span>
+        <span class="stat-value">Casa Suba</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <span class="stat-label">Capacidad</span>
+        <span class="stat-value">6 Unidades (3 Locales + 3 Apartamentos)</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <span class="stat-label">Servicios Comunes</span>
+        <span class="stat-value">Agua • Energía • Gas</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <span class="stat-label">Estado</span>
+        <span class="stat-value highlight-status">
+          <span class="status-pulse"></span>
+          Liquidación Activa
+        </span>
+      </div>
+    </div>
+
+    <!-- Navigation Segmented Control Bar -->
     <nav class="dashboard-nav glass-panel-light">
-      <!-- Desktop Tab Buttons -->
-      <div class="nav-tabs-desktop">
+      <!-- Desktop Segmented Tab Buttons -->
+      <div class="nav-tabs-desktop" role="tablist">
         <button
           class="nav-tab-btn"
+          role="tab"
+          [attr.aria-selected]="activeTab() === 'canon'"
           [class.active]="activeTab() === 'canon'"
           (click)="setTab('canon')"
         >
-          <span class="tab-icon">📈</span>
+          <span class="tab-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+              <polyline points="17 6 23 6 23 12"/>
+            </svg>
+          </span>
           <span class="tab-text">1. Incremento Canon (IPC)</span>
+          <span class="tab-badge">IPC</span>
         </button>
 
         <button
           class="nav-tab-btn"
+          role="tab"
+          [attr.aria-selected]="activeTab() === 'utilities'"
           [class.active]="activeTab() === 'utilities'"
           (click)="setTab('utilities')"
         >
-          <span class="tab-icon">⚡</span>
-          <span class="tab-text">2. Servicios Públicos (Agua, Energía, Gas)</span>
+          <span class="tab-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+            </svg>
+          </span>
+          <span class="tab-text">2. Servicios Públicos</span>
+          <span class="tab-badge">Agua / Luz / Gas</span>
         </button>
 
         <button
           class="nav-tab-btn"
+          role="tab"
+          [attr.aria-selected]="activeTab() === 'overview'"
           [class.active]="activeTab() === 'overview'"
           (click)="setTab('overview')"
         >
-          <span class="tab-icon">🏢</span>
+          <span class="tab-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7"/>
+              <rect x="14" y="3" width="7" height="7"/>
+              <rect x="14" y="14" width="7" height="7"/>
+              <rect x="3" y="14" width="7" height="7"/>
+            </svg>
+          </span>
           <span class="tab-text">3. Resumen de Propiedad</span>
+          <span class="tab-badge">Directorio</span>
         </button>
       </div>
 
-      <!-- Mobile Dropdown Selector for optimal view on smaller screens -->
+      <!-- Mobile Dropdown Selector for small screens -->
       <div class="nav-tabs-mobile">
         <label for="mobileMainTabSelect" class="mobile-main-nav-label">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
-          Navegación de Funcionalidades:
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="4" y1="6" x2="20" y2="6"/>
+            <line x1="4" y1="12" x2="20" y2="12"/>
+            <line x1="4" y1="18" x2="20" y2="18"/>
+          </svg>
+          Módulo de Liquidación:
         </label>
-        <select
-          id="mobileMainTabSelect"
-          class="glass-input mobile-main-tab-select"
-          [ngModel]="activeTab()"
-          (ngModelChange)="setTab($event)"
-        >
-          <option value="canon">📈 1. Incremento Canon (IPC)</option>
-          <option value="utilities">⚡ 2. Servicios Públicos (Agua, Energía, Gas)</option>
-          <option value="overview">🏢 3. Resumen de Propiedad</option>
-        </select>
+        <div class="mobile-select-wrapper">
+          <select
+            id="mobileMainTabSelect"
+            class="glass-input mobile-main-tab-select"
+            [ngModel]="activeTab()"
+            (ngModelChange)="setTab($event)"
+          >
+            <option value="canon">1. Incremento Canon (IPC)</option>
+            <option value="utilities">2. Servicios Públicos (Agua, Energía, Gas)</option>
+            <option value="overview">3. Resumen de Propiedad & Historial</option>
+          </select>
+          <div class="select-chevron">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </div>
+        </div>
       </div>
     </nav>
 
     <!-- Tab Content Switcher -->
-    @switch (activeTab()) {
-      @case ('canon') {
-        <app-canon-calculator></app-canon-calculator>
+    <div class="tab-content-area">
+      @switch (activeTab()) {
+        @case ('canon') {
+          <app-canon-calculator></app-canon-calculator>
+        }
+        @case ('utilities') {
+          <app-utilities-calculator></app-utilities-calculator>
+        }
+        @case ('overview') {
+          <app-property-overview></app-property-overview>
+        }
       }
-      @case ('utilities') {
-        <app-utilities-calculator></app-utilities-calculator>
-      }
-      @case ('overview') {
-        <app-property-overview></app-property-overview>
-      }
-    }
+    </div>
   </div>
 
-  <!-- Glass Footer -->
-  <footer class="app-footer glass-panel-light">
+  <!-- Minimalist Glass Footer -->
+  <footer class="app-footer">
     <div class="footer-content">
-      <p>
-        Casa Suba • Sistema de Administración de Inmuebles (3 Locales Comerciales & 3 Apartamentos)
-      </p>
-      <span class="footer-tag font-mono">Marlen Rico Florido</span>
+      <div class="footer-left">
+        <span class="footer-brand">Casa Suba</span>
+        <span class="footer-dot">•</span>
+        <span class="footer-text">Sistema de Administración de Inmuebles (3 Locales Comerciales & 3 Apartamentos)</span>
+      </div>
+      <div class="footer-right">
+        <span class="footer-tag font-mono">Marlen Rico Florido</span>
+      </div>
     </div>
   </footer>
 </main>

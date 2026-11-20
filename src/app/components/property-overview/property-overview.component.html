@@ -1,10 +1,27 @@
 <div class="overview-container animate-fade-in">
-  <!-- Unit Inventory Cards Grid -->
+  <!-- Unit Inventory Section Header -->
   <div class="overview-header-title">
-    <h3>🏢 Directorio de Unidades en Casa Suba</h3>
-    <p>Resumen de las 6 unidades inmobiliarias registradas en la propiedad</p>
+    <div class="overview-title-row">
+      <div class="overview-icon-badge">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 21h18"/>
+          <path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"/>
+          <path d="M9 9h1"/>
+          <path d="M9 13h1"/>
+          <path d="M9 17h1"/>
+          <path d="M14 9h1"/>
+          <path d="M14 13h1"/>
+          <path d="M14 17h1"/>
+        </svg>
+      </div>
+      <div>
+        <h3>Directorio de Unidades Inmobiliarias</h3>
+        <p>Inventario oficial de los 3 locales comerciales y 3 apartamentos residenciales en Casa Suba</p>
+      </div>
+    </div>
   </div>
 
+  <!-- Units Grid -->
   <div class="units-grid">
     @for (unit of units; track unit.id) {
       <div class="unit-card glass-panel" [class.commercial-border]="unit.type === 'commercial'">
@@ -15,7 +32,7 @@
           <span class="unit-floor-badge">{{ unit.floor }}</span>
         </div>
         <h4 class="unit-name">{{ unit.name }}</h4>
-        <p class="tenant-name">Occupant / Ref: {{ unit.defaultTenant }}</p>
+        <p class="tenant-name">Referencia / Arrendatario: {{ unit.defaultTenant }}</p>
       </div>
     }
   </div>
@@ -24,11 +41,14 @@
   <div class="history-section glass-panel">
     <div class="history-header">
       <div class="history-title-box">
-        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <polyline points="12 6 12 12 16 14"/>
+        </svg>
         <h4>Historial Reciente de Cálculos</h4>
       </div>
       @if (calculatorService.history().length > 0) {
-        <button class="glass-btn btn-sm" (click)="clearHistory()">
+        <button class="glass-btn btn-sm btn-ghost" (click)="clearHistory()">
           Limpiar Historial
         </button>
       }
@@ -52,7 +72,7 @@
                 (click)="copyToClipboard(item.details, idx)"
                 title="Copiar detalles al portapapeles"
               >
-                {{ copiedItemIndex === idx ? '✓ Copiado' : '📋' }}
+                {{ copiedItemIndex === idx ? '✓ Copiado' : 'Copiar' }}
               </button>
             </div>
           </div>
@@ -60,7 +80,7 @@
       </div>
     } @else {
       <div class="empty-history">
-        <p>Aún no has realizado cálculos en esta sesión. Los cálculos realizados de Canon, Energía, Agua o Gas aparecerán aquí automáticamente.</p>
+        <p>Aún no se han generado registros en esta sesión. Los cálculos realizados de Canon, Energía, Agua o Gas se almacenarán aquí automáticamente.</p>
       </div>
     }
   </div>
