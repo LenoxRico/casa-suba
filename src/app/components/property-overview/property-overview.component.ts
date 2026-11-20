@@ -44,6 +44,10 @@ export class PropertyOverviewComponent {
     return this.calculatorService.formatCurrency(amount);
   }
 
+  public goToHome(): void {
+    this.navigateTab.emit('home');
+  }
+
   public goToCanon(): void {
     this.navigateTab.emit('canon');
   }

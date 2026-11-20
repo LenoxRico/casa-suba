@@ -1,713 +1,767 @@
 <div class="calculator-card glass-panel animate-fade-in">
-  <!-- Card Header -->
-  <div class="card-header">
-    <div class="header-title-box">
-      <div class="icon-badge cyan-glow">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="22"
-          height="22"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-        </svg>
+  @if (selectedService === null) {
+    <!-- STEP 1 OF UTILITIES: ASK WHICH SERVICE TO CALCULATE -->
+    <div class="service-selection-hub animate-fade-in">
+      <div class="selection-header">
+        <button class="back-link-btn" (click)="goToHome()" type="button" title="Volver al Menú Principal">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </button>
+        <div>
+          <span class="selection-tag">Módulo de Servicios</span>
+          <h2 class="selection-title">¿Qué servicio deseas calcular?</h2>
+          <p class="selection-desc">Selecciona el tipo de servicio público a liquidar para la propiedad Casa Suba</p>
+        </div>
       </div>
-      <div>
-        <h2 class="section-title">2. Distribución de Servicios Públicos</h2>
-        <p class="section-subtitle">
-          Liquidación exacta para cada apartamento en Energía, Agua Potable y Gas Natural
-        </p>
-      </div>
-    </div>
-    <span class="glass-badge badge-cyan">Módulo Servicios</span>
-  </div>
 
-  <!-- Service Selector Segmented Tabs -->
-  <div class="service-tabs-container">
-    <div class="service-tabs-desktop" role="tablist">
-      <button
-        class="tab-btn"
-        role="tab"
-        [class.active]="activeService === 'energy'"
-        (click)="selectService('energy')"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
-        </svg>
-        <span>Energía Eléctrica</span>
-      </button>
-
-      <button
-        class="tab-btn"
-        role="tab"
-        [class.active]="activeService === 'water'"
-        (click)="selectService('water')"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
-        </svg>
-        <span>Agua Potable</span>
-      </button>
-
-      <button
-        class="tab-btn"
-        role="tab"
-        [class.active]="activeService === 'gas'"
-        (click)="selectService('gas')"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <path
-            d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"
-          />
-        </svg>
-        <span>Gas Natural</span>
-      </button>
-    </div>
-
-    <!-- Mobile Select Dropdown -->
-    <div class="service-tabs-mobile">
-      <label for="mobileServiceSelect" class="mobile-service-label">
-        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        Seleccionar Servicio:
-      </label>
-      <select
-        id="mobileServiceSelect"
-        class="glass-input mobile-service-select"
-        [ngModel]="activeService"
-        (ngModelChange)="selectService($event)"
-      >
-        <option value="energy">⚡ Energía Eléctrica</option>
-        <option value="water">💧 Agua Potable</option>
-        <option value="gas">🔥 Gas Natural</option>
-      </select>
-    </div>
-  </div>
-
-  <!-- TAB 1: ENERGÍA ELECTRICIDAD -->
-  @if (activeService === 'energy') {
-    <div class="calculator-grid animate-fade-in">
-      <!-- Inputs Section -->
-      <div class="inputs-section">
-        <div class="service-intro-box">
-          <p>
-            Recibo compartido entre Apto 2, Apto 3 y Apto 4. Apto 3 y 4 cuentan con medidor independiente; el Apto 2 se obtiene por diferencia.
-          </p>
-        </div>
-
-        <div class="glass-input-group">
-          <label for="energyBill">Valor Total de la Factura de Energía ($ COP):</label>
-          <div class="glass-input-wrapper">
-            <span class="input-prefix">$</span>
-            <input
-              id="energyBill"
-              type="text"
-              inputmode="numeric"
-              copMask
-              class="glass-input has-prefix"
-              placeholder="Ej. 250.000"
-              [(ngModel)]="energyTotalBill"
-              (keyup.enter)="calculateEnergy(true)"
-            />
+      <div class="service-choices-grid">
+        <!-- 1. Energía Eléctrica -->
+        <button class="service-choice-card energy-choice glass-panel" (click)="selectService('energy')" type="button">
+          <div class="choice-icon-wrap icon-cyan">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
           </div>
-        </div>
-
-        <div class="glass-input-group">
-          <label for="energyPrice">Precio del Kilovatio ($ / kWh):</label>
-          <div class="glass-input-wrapper">
-            <span class="input-prefix">$</span>
-            <input
-              id="energyPrice"
-              type="text"
-              inputmode="numeric"
-              copMask
-              class="glass-input has-prefix"
-              placeholder="Ej. 850"
-              [(ngModel)]="energyPricePerKwh"
-              (keyup.enter)="calculateEnergy(true)"
-            />
-          </div>
-        </div>
-
-        <div class="meters-input-grid">
-          <div class="glass-input-group">
-            <label for="apt3Meter">Apto 3 (kWh):</label>
-            <div class="glass-input-wrapper">
-              <input
-                id="apt3Meter"
-                type="number"
-                class="glass-input has-suffix"
-                placeholder="110"
-                [(ngModel)]="energyApt3Kwh"
-                (keyup.enter)="calculateEnergy(true)"
-              />
-              <span class="input-suffix">kWh</span>
+          <div class="choice-text">
+            <div class="choice-tag-row">
+              <span class="choice-badge badge-cyan">Medidores kWh</span>
             </div>
+            <h3 class="choice-title">1. Energía Eléctrica</h3>
+            <p class="choice-desc">Recibo compartido. Apto 3 y 4 se calculan por medidor independiente en kWh; Apto 2 por resta.</p>
           </div>
+          <div class="choice-arrow">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </div>
+        </button>
 
-          <div class="glass-input-group">
-            <label for="apt4Meter">Apto 4 (kWh):</label>
-            <div class="glass-input-wrapper">
-              <input
-                id="apt4Meter"
-                type="number"
-                class="glass-input has-suffix"
-                placeholder="95"
-                [(ngModel)]="energyApt4Kwh"
-                (keyup.enter)="calculateEnergy(true)"
-              />
-              <span class="input-suffix">kWh</span>
+        <!-- 2. Agua Potable -->
+        <button class="service-choice-card water-choice glass-panel" (click)="selectService('water')" type="button">
+          <div class="choice-icon-wrap icon-indigo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
+            </svg>
+          </div>
+          <div class="choice-text">
+            <div class="choice-tag-row">
+              <span class="choice-badge badge-indigo">Por Residentes</span>
             </div>
+            <h3 class="choice-title">2. Agua Potable</h3>
+            <p class="choice-desc">Descuento de cuota fija para 3 locales comerciales y saldo distribuido equitativamente por habitante.</p>
           </div>
-        </div>
+          <div class="choice-arrow">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </div>
+        </button>
 
-        @if (energyError) {
-          <div class="error-banner">⚠️ {{ energyError }}</div>
-        }
-
-        <button class="glass-btn btn-primary btn-full" (click)="calculateEnergy(true)">
-          Calcular Distribución de Energía
+        <!-- 3. Gas Natural -->
+        <button class="service-choice-card gas-choice glass-panel" (click)="selectService('gas')" type="button">
+          <div class="choice-icon-wrap icon-amber">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" />
+            </svg>
+          </div>
+          <div class="choice-text">
+            <div class="choice-tag-row">
+              <span class="choice-badge badge-amber">Mitad 50 / 50</span>
+            </div>
+            <h3 class="choice-title">3. Gas Natural</h3>
+            <p class="choice-desc">División exacta en 2 partes iguales (50% cada una) entre los apartamentos con punto de gas.</p>
+          </div>
+          <div class="choice-arrow">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </div>
         </button>
       </div>
 
-      <!-- Results Section: Highlighted Relevant Info First -->
-      <div class="results-section">
-        @if (energyResult) {
-          <div class="results-container animate-fade-in">
-            <!-- 1. Highlighted Relevant Info: Direct Apartment Totals -->
-            <div class="results-primary-summary">
-              <div class="summary-top-tag">
-                <span class="badge-dot"></span>
-                TOTAL A PAGAR POR APARTAMENTO (ENERGÍA)
-              </div>
-
-              <div class="apartment-quick-cards">
-                <!-- Apt 2 -->
-                <div class="quick-apto-card apt-2">
-                  <div class="card-left">
-                    <span class="apto-badge">Piso 2</span>
-                    <span class="apto-name">Apto 2</span>
-                  </div>
-                  <div class="card-right">
-                    <span class="amount-value">{{ formatMoney(energyResult.apt2Cost) }}</span>
-                    <span class="sub-hint">{{ energyResult.apt2Kwh.toFixed(1) }} kWh</span>
-                  </div>
-                </div>
-
-                <!-- Apt 3 -->
-                <div class="quick-apto-card apt-3">
-                  <div class="card-left">
-                    <span class="apto-badge">Piso 3</span>
-                    <span class="apto-name">Apto 3</span>
-                  </div>
-                  <div class="card-right">
-                    <span class="amount-value">{{ formatMoney(energyResult.apt3Cost) }}</span>
-                    <span class="sub-hint">{{ energyResult.apt3Kwh.toFixed(1) }} kWh (Medidor)</span>
-                  </div>
-                </div>
-
-                <!-- Apt 4 -->
-                <div class="quick-apto-card apt-4">
-                  <div class="card-left">
-                    <span class="apto-badge">Piso 4</span>
-                    <span class="apto-name">Apto 4</span>
-                  </div>
-                  <div class="card-right">
-                    <span class="amount-value">{{ formatMoney(energyResult.apt4Cost) }}</span>
-                    <span class="sub-hint">{{ energyResult.apt4Kwh.toFixed(1) }} kWh (Medidor)</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- 2. Progressive Disclosure Button -->
-            <button 
-              class="toggle-details-btn" 
-              (click)="toggleEnergyDetails()" 
-              type="button" 
-              [attr.aria-expanded]="showEnergyDetails"
-            >
-              <span class="toggle-text">
-                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="12" cy="12" r="10"></circle>
-                  <line x1="12" y1="16" x2="12" y2="12"></line>
-                  <line x1="12" y1="8" x2="12.01" y2="8"></line>
-                </svg>
-                {{ showEnergyDetails ? 'Ocultar desglose técnico de kWh' : 'Ver desglose técnico de kWh y medidores' }}
-              </span>
-              <svg 
-                class="chevron-icon" 
-                [class.rotated]="showEnergyDetails" 
-                xmlns="http://www.w3.org/2000/svg" 
-                width="16" 
-                height="16" 
-                viewBox="0 0 24 24" 
-                fill="none" 
-                stroke="currentColor" 
-                stroke-width="2" 
-                stroke-linecap="round" 
-                stroke-linejoin="round"
-              >
-                <polyline points="6 9 12 15 18 9"></polyline>
-              </svg>
-            </button>
-
-            <!-- 3. Expandable Technical Breakdown -->
-            @if (showEnergyDetails) {
-              <div class="expandable-details animate-fade-in">
-                <div class="tech-metrics-bar">
-                  <div class="tech-metric">
-                    <span class="tech-label">Factura Total:</span>
-                    <span class="tech-val">{{ formatMoney(energyResult.totalBill) }}</span>
-                  </div>
-                  <div class="tech-metric">
-                    <span class="tech-label">Consumo Total:</span>
-                    <span class="tech-val">{{ energyResult.totalKwh.toFixed(1) }} kWh</span>
-                  </div>
-                  <div class="tech-metric">
-                    <span class="tech-label">Precio kWh:</span>
-                    <span class="tech-val">${{ energyResult.pricePerKwh }} /kWh</span>
-                  </div>
-                </div>
-
-                <div class="math-breakdown-box">
-                  <span class="math-title">Apto 2 (Resta):</span>
-                  <code>{{ energyResult.totalKwh.toFixed(1) }} kWh - ({{ energyResult.apt3Kwh }} + {{ energyResult.apt4Kwh }} kWh) = {{ energyResult.apt2Kwh.toFixed(1) }} kWh</code>
-                </div>
-
-                <button class="copy-summary-btn" (click)="copyServiceSummary('energy')" type="button">
-                  {{ copiedService === 'energy' ? '✓ Liquidación Copiada' : 'Copiar Liquidación de Energía' }}
-                </button>
-              </div>
-            }
-          </div>
-        }
-      </div>
-    </div>
-  }
-
-  <!-- TAB 2: AGUA POTABLE -->
-  @if (activeService === 'water') {
-    <div class="calculator-grid animate-fade-in">
-      <!-- Inputs Section -->
-      <div class="inputs-section">
-        <div class="service-intro-box">
-          <p>
-            Se descuenta primero la cuota fija asignada a cada uno de los 3 locales comerciales. El saldo restante se divide por habitante entre los 3 apartamentos.
-          </p>
-        </div>
-
-        <div class="glass-input-group">
-          <label for="waterBill">Valor Total Factura de Agua ($ COP):</label>
-          <div class="glass-input-wrapper">
-            <span class="input-prefix">$</span>
-            <input
-              id="waterBill"
-              type="text"
-              inputmode="numeric"
-              copMask
-              class="glass-input has-prefix"
-              placeholder="Ej. 180.000"
-              [(ngModel)]="waterTotalBill"
-              (keyup.enter)="calculateWater(true)"
-            />
-          </div>
-        </div>
-
-        <div class="glass-input-group">
-          <label for="waterCommercialStore">Cuota Fija por Local Comercial ($ COP):</label>
-          <div class="glass-input-wrapper">
-            <span class="input-prefix">$</span>
-            <input
-              id="waterCommercialStore"
-              type="text"
-              inputmode="numeric"
-              copMask
-              class="glass-input has-prefix"
-              placeholder="Ej. 10.000"
-              [(ngModel)]="waterCommercialPerStore"
-              (keyup.enter)="calculateWater(true)"
-            />
-          </div>
-          <span class="input-help-text">
-            Deducción total para 3 locales: <strong>{{ formatMoney((waterCommercialPerStore || 0) * 3) }}</strong>
-          </span>
-        </div>
-
-        <div class="people-inputs-grid">
-          <div class="glass-input-group">
-            <label for="apt2People">Apto 2:</label>
-            <div class="glass-input-wrapper">
-              <input
-                id="apt2People"
-                type="number"
-                min="0"
-                class="glass-input has-suffix"
-                [(ngModel)]="waterApt2People"
-                (keyup.enter)="calculateWater(true)"
-              />
-              <span class="input-suffix">pers.</span>
-            </div>
-          </div>
-
-          <div class="glass-input-group">
-            <label for="apt3People">Apto 3:</label>
-            <div class="glass-input-wrapper">
-              <input
-                id="apt3People"
-                type="number"
-                min="0"
-                class="glass-input has-suffix"
-                [(ngModel)]="waterApt3People"
-                (keyup.enter)="calculateWater(true)"
-              />
-              <span class="input-suffix">pers.</span>
-            </div>
-          </div>
-
-          <div class="glass-input-group">
-            <label for="apt4People">Apto 4:</label>
-            <div class="glass-input-wrapper">
-              <input
-                id="apt4People"
-                type="number"
-                min="0"
-                class="glass-input has-suffix"
-                [(ngModel)]="waterApt4People"
-                (keyup.enter)="calculateWater(true)"
-              />
-              <span class="input-suffix">pers.</span>
-            </div>
-          </div>
-        </div>
-
-        @if (waterError) {
-          <div class="error-banner">⚠️ {{ waterError }}</div>
-        }
-
-        <button class="glass-btn btn-primary btn-full" (click)="calculateWater(true)">
-          Calcular Distribución de Agua
+      <!-- Bottom return to Home Menu -->
+      <div class="step-nav-footer">
+        <button class="glass-btn btn-ghost btn-sm" (click)="goToHome()" type="button">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+          <span>← Volver al Menú Principal</span>
         </button>
       </div>
+    </div>
+  } @else {
+    <!-- STEP 2 OF UTILITIES: ACTIVE SERVICE CALCULATOR -->
+    <div class="active-calculator-view animate-fade-in">
+      <!-- Calculator Header with Service Switcher & Back -->
+      <div class="card-header">
+        <div class="header-title-box">
+          <button class="back-link-btn" (click)="clearServiceSelection()" type="button" title="Volver a selección de servicios">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+          </button>
+          <div>
+            <div class="header-breadcrumbs">
+              <button class="breadcrumb-link" (click)="clearServiceSelection()" type="button">Servicios</button>
+              <span class="breadcrumb-sep">/</span>
+              <span class="breadcrumb-current">
+                {{ selectedService === 'energy' ? 'Energía Eléctrica' : selectedService === 'water' ? 'Agua Potable' : 'Gas Natural' }}
+              </span>
+            </div>
+            <h2 class="section-title">
+              {{ selectedService === 'energy' ? 'Liquidación de Energía Eléctrica' : selectedService === 'water' ? 'Liquidación de Agua Potable' : 'Liquidación de Gas Natural' }}
+            </h2>
+          </div>
+        </div>
 
-      <!-- Results Section: Highlighted Relevant Info First -->
-      <div class="results-section">
-        @if (waterResult) {
-          <div class="results-container animate-fade-in">
-            <!-- 1. Highlighted Relevant Info: Direct Apartment & Store Totals -->
-            <div class="results-primary-summary">
-              <div class="summary-top-tag">
-                <span class="badge-dot"></span>
-                TOTAL A COBRAR POR UNIDAD (AGUA)
+        <div class="header-actions-row">
+          <!-- Fast switch to another service -->
+          <button class="change-service-chip" (click)="clearServiceSelection()" type="button">
+            <span>Cambiar Servicio</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- SERVICE 1: ENERGÍA ELECTRICIDAD -->
+      @if (selectedService === 'energy') {
+        <div class="calculator-grid animate-fade-in">
+          <!-- Inputs Section with Live Recalculation -->
+          <div class="inputs-section">
+            <div class="service-intro-box">
+              <p>
+                Apto 3 y Apto 4 poseen medidor de kWh. Restando ambos del total facturado se obtiene el consumo de Apto 2.
+              </p>
+            </div>
+
+            <div class="glass-input-group">
+              <label for="energyBill">Valor Total de la Factura de Energía ($ COP):</label>
+              <div class="glass-input-wrapper">
+                <span class="input-prefix">$</span>
+                <input
+                  id="energyBill"
+                  type="text"
+                  inputmode="numeric"
+                  copMask
+                  class="glass-input has-prefix"
+                  placeholder="Ej. 250.000"
+                  [ngModel]="energyTotalBill"
+                  (ngModelChange)="energyTotalBill = $event; onEnergyInputChange()"
+                />
+              </div>
+            </div>
+
+            <div class="glass-input-group">
+              <label for="energyPrice">Precio del Kilovatio ($ / kWh):</label>
+              <div class="glass-input-wrapper">
+                <span class="input-prefix">$</span>
+                <input
+                  id="energyPrice"
+                  type="text"
+                  inputmode="numeric"
+                  copMask
+                  class="glass-input has-prefix"
+                  placeholder="Ej. 850"
+                  [ngModel]="energyPricePerKwh"
+                  (ngModelChange)="energyPricePerKwh = $event; onEnergyInputChange()"
+                />
+              </div>
+            </div>
+
+            <div class="meters-input-grid">
+              <div class="glass-input-group">
+                <label for="apt3Meter">Apto 3 (kWh):</label>
+                <div class="glass-input-wrapper">
+                  <input
+                    id="apt3Meter"
+                    type="number"
+                    class="glass-input has-suffix"
+                    placeholder="110"
+                    [(ngModel)]="energyApt3Kwh"
+                    (ngModelChange)="onEnergyInputChange()"
+                  />
+                  <span class="input-suffix">kWh</span>
+                </div>
               </div>
 
-              <div class="apartment-quick-cards">
-                <!-- Locales Comerciales -->
-                <div class="quick-apto-card commercial">
-                  <div class="card-left">
-                    <span class="apto-badge amber">Piso 1</span>
-                    <span class="apto-name">3 Locales Comerciales</span>
-                  </div>
-                  <div class="card-right">
-                    <span class="amount-value">{{ formatMoney(waterResult.commercialTotal) }}</span>
-                    <span class="sub-hint">{{ formatMoney(waterResult.commercialPerStore) }} c/u</span>
-                  </div>
-                </div>
-
-                <!-- Apt 2 -->
-                <div class="quick-apto-card apt-2">
-                  <div class="card-left">
-                    <span class="apto-badge">Piso 2</span>
-                    <span class="apto-name">Apto 2</span>
-                  </div>
-                  <div class="card-right">
-                    <span class="amount-value">{{ formatMoney(waterResult.apt2Cost) }}</span>
-                    <span class="sub-hint">{{ waterResult.apt2People }} personas</span>
-                  </div>
-                </div>
-
-                <!-- Apt 3 -->
-                <div class="quick-apto-card apt-3">
-                  <div class="card-left">
-                    <span class="apto-badge">Piso 3</span>
-                    <span class="apto-name">Apto 3</span>
-                  </div>
-                  <div class="card-right">
-                    <span class="amount-value">{{ formatMoney(waterResult.apt3Cost) }}</span>
-                    <span class="sub-hint">{{ waterResult.apt3People }} personas</span>
-                  </div>
-                </div>
-
-                <!-- Apt 4 -->
-                <div class="quick-apto-card apt-4">
-                  <div class="card-left">
-                    <span class="apto-badge">Piso 4</span>
-                    <span class="apto-name">Apto 4</span>
-                  </div>
-                  <div class="card-right">
-                    <span class="amount-value">{{ formatMoney(waterResult.apt4Cost) }}</span>
-                    <span class="sub-hint">{{ waterResult.apt4People }} personas</span>
-                  </div>
+              <div class="glass-input-group">
+                <label for="apt4Meter">Apto 4 (kWh):</label>
+                <div class="glass-input-wrapper">
+                  <input
+                    id="apt4Meter"
+                    type="number"
+                    class="glass-input has-suffix"
+                    placeholder="95"
+                    [(ngModel)]="energyApt4Kwh"
+                    (ngModelChange)="onEnergyInputChange()"
+                  />
+                  <span class="input-suffix">kWh</span>
                 </div>
               </div>
             </div>
 
-            <!-- 2. Progressive Disclosure Button -->
-            <button 
-              class="toggle-details-btn" 
-              (click)="toggleWaterDetails()" 
-              type="button" 
-              [attr.aria-expanded]="showWaterDetails"
-            >
-              <span class="toggle-text">
-                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="12" cy="12" r="10"></circle>
-                  <line x1="12" y1="16" x2="12" y2="12"></line>
-                  <line x1="12" y1="8" x2="12.01" y2="8"></line>
-                </svg>
-                {{ showWaterDetails ? 'Ocultar desglose de cálculo por persona' : 'Ver desglose de cálculo por persona y deducciones' }}
-              </span>
-              <svg 
-                class="chevron-icon" 
-                [class.rotated]="showWaterDetails" 
-                xmlns="http://www.w3.org/2000/svg" 
-                width="16" 
-                height="16" 
-                viewBox="0 0 24 24" 
-                fill="none" 
-                stroke="currentColor" 
-                stroke-width="2" 
-                stroke-linecap="round" 
-                stroke-linejoin="round"
+            @if (energyError) {
+              <div class="error-banner">⚠️ {{ energyError }}</div>
+            }
+
+            <!-- Live Status & Save History Button -->
+            <div class="live-action-bar">
+              <div class="live-status-indicator">
+                <span class="status-pulse-dot"></span>
+                <span>Actualización automática en vivo</span>
+              </div>
+
+              <button 
+                class="glass-btn btn-sm btn-ghost save-history-action" 
+                [class.saved]="savedService === 'energy'"
+                (click)="saveEnergyHistory()" 
+                type="button"
               >
-                <polyline points="6 9 12 15 18 9"></polyline>
-              </svg>
-            </button>
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                  <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                </svg>
+                <span>{{ savedService === 'energy' ? '✓ Guardado' : 'Guardar en Historial' }}</span>
+              </button>
+            </div>
+          </div>
 
-            <!-- 3. Expandable Water Breakdown -->
-            @if (showWaterDetails) {
-              <div class="expandable-details animate-fade-in">
-                <div class="tech-metrics-bar">
-                  <div class="tech-metric">
-                    <span class="tech-label">Factura Total:</span>
-                    <span class="tech-val">{{ formatMoney(waterResult.totalBill) }}</span>
+          <!-- Results Section: Highlighted Relevant Info First -->
+          <div class="results-section">
+            @if (energyResult) {
+              <div class="results-container animate-fade-in">
+                <div class="results-primary-summary">
+                  <div class="summary-top-tag">
+                    <span class="badge-dot"></span>
+                    TOTAL A PAGAR POR APARTAMENTO (ENERGÍA)
                   </div>
-                  <div class="tech-metric">
-                    <span class="tech-label">Deducción 3 Locales:</span>
-                    <span class="tech-val">{{ formatMoney(waterResult.commercialTotal) }}</span>
-                  </div>
-                  <div class="tech-metric">
-                    <span class="tech-label">Tarifa / Persona:</span>
-                    <span class="tech-val highlight-cyan">{{ formatMoney(waterResult.costPerPerson) }}</span>
-                  </div>
-                  <div class="tech-metric">
-                    <span class="tech-label">Total Habitantes:</span>
-                    <span class="tech-val">{{ waterResult.totalPeople }} pers.</span>
+
+                  <div class="apartment-quick-cards">
+                    <!-- Apt 2 -->
+                    <div class="quick-apto-card apt-2">
+                      <div class="card-left">
+                        <span class="apto-badge">Piso 2</span>
+                        <span class="apto-name">Apto 2</span>
+                      </div>
+                      <div class="card-right">
+                        <span class="amount-value">{{ formatMoney(energyResult.apt2Cost) }}</span>
+                        <span class="sub-hint">{{ energyResult.apt2Kwh.toFixed(1) }} kWh (Diferencia)</span>
+                      </div>
+                    </div>
+
+                    <!-- Apt 3 -->
+                    <div class="quick-apto-card apt-3">
+                      <div class="card-left">
+                        <span class="apto-badge">Piso 3</span>
+                        <span class="apto-name">Apto 3</span>
+                      </div>
+                      <div class="card-right">
+                        <span class="amount-value">{{ formatMoney(energyResult.apt3Cost) }}</span>
+                        <span class="sub-hint">{{ energyResult.apt3Kwh.toFixed(1) }} kWh (Medidor)</span>
+                      </div>
+                    </div>
+
+                    <!-- Apt 4 -->
+                    <div class="quick-apto-card apt-4">
+                      <div class="card-left">
+                        <span class="apto-badge">Piso 4</span>
+                        <span class="apto-name">Apto 4</span>
+                      </div>
+                      <div class="card-right">
+                        <span class="amount-value">{{ formatMoney(energyResult.apt4Cost) }}</span>
+                        <span class="sub-hint">{{ energyResult.apt4Kwh.toFixed(1) }} kWh (Medidor)</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
-                <div class="math-breakdown-box">
-                  <span class="math-title">Fórmula:</span>
-                  <code>({{ formatMoney(waterResult.totalBill) }} - {{ formatMoney(waterResult.commercialTotal) }}) ÷ {{ waterResult.totalPeople }} pers. = {{ formatMoney(waterResult.costPerPerson) }} /persona</code>
-                </div>
-
-                <button class="copy-summary-btn" (click)="copyServiceSummary('water')" type="button">
-                  {{ copiedService === 'water' ? '✓ Liquidación Copiada' : 'Copiar Liquidación de Agua' }}
+                <!-- Progressive Disclosure Button -->
+                <button 
+                  class="toggle-details-btn" 
+                  (click)="toggleEnergyDetails()" 
+                  type="button" 
+                  [attr.aria-expanded]="showEnergyDetails"
+                >
+                  <span class="toggle-text">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <line x1="12" y1="16" x2="12" y2="12"></line>
+                      <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                    </svg>
+                    {{ showEnergyDetails ? 'Ocultar desglose técnico de kWh' : 'Ver desglose técnico de kWh y medidores' }}
+                  </span>
+                  <svg 
+                    class="chevron-icon" 
+                    [class.rotated]="showEnergyDetails" 
+                    xmlns="http://www.w3.org/2000/svg" 
+                    width="16" 
+                    height="16" 
+                    viewBox="0 0 24 24" 
+                    fill="none" 
+                    stroke="currentColor" 
+                    stroke-width="2" 
+                    stroke-linecap="round" 
+                    stroke-linejoin="round"
+                  >
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
                 </button>
+
+                <!-- Expandable Technical Breakdown -->
+                @if (showEnergyDetails) {
+                  <div class="expandable-details animate-fade-in">
+                    <div class="tech-metrics-bar">
+                      <div class="tech-metric">
+                        <span class="tech-label">Factura Total:</span>
+                        <span class="tech-val">{{ formatMoney(energyResult.totalBill) }}</span>
+                      </div>
+                      <div class="tech-metric">
+                        <span class="tech-label">Consumo Total:</span>
+                        <span class="tech-val">{{ energyResult.totalKwh.toFixed(1) }} kWh</span>
+                      </div>
+                      <div class="tech-metric">
+                        <span class="tech-label">Precio kWh:</span>
+                        <span class="tech-val">${{ energyResult.pricePerKwh }} /kWh</span>
+                      </div>
+                    </div>
+
+                    <div class="math-breakdown-box">
+                      <span class="math-title">Apto 2 (Resta):</span>
+                      <code>{{ energyResult.totalKwh.toFixed(1) }} kWh - ({{ energyResult.apt3Kwh }} + {{ energyResult.apt4Kwh }} kWh) = {{ energyResult.apt2Kwh.toFixed(1) }} kWh</code>
+                    </div>
+
+                    <button class="copy-summary-btn" (click)="copyServiceSummary('energy')" type="button">
+                      {{ copiedService === 'energy' ? '✓ Liquidación Copiada' : 'Copiar Liquidación de Energía' }}
+                    </button>
+                  </div>
+                }
               </div>
             }
           </div>
-        }
-      </div>
-    </div>
-  }
-
-  <!-- TAB 3: GAS NATURAL -->
-  @if (activeService === 'gas') {
-    <div class="calculator-grid animate-fade-in">
-      <!-- Inputs Section -->
-      <div class="inputs-section">
-        <div class="service-intro-box">
-          <p>
-            El servicio de gas natural se divide equitativamente en 2 partes iguales (50% cada una).
-          </p>
         </div>
+      }
 
-        <div class="glass-input-group">
-          <label for="gasBill">Valor Total Factura de Gas ($ COP):</label>
-          <div class="glass-input-wrapper">
-            <span class="input-prefix">$</span>
-            <input
-              id="gasBill"
-              type="text"
-              inputmode="numeric"
-              copMask
-              class="glass-input has-prefix"
-              placeholder="Ej. 60.000"
-              [(ngModel)]="gasTotalBill"
-              (keyup.enter)="calculateGas(true)"
-            />
+      <!-- SERVICE 2: AGUA POTABLE -->
+      @if (selectedService === 'water') {
+        <div class="calculator-grid animate-fade-in">
+          <!-- Inputs Section with Live Recalculation -->
+          <div class="inputs-section">
+            <div class="service-intro-box">
+              <p>
+                Se descuenta primero la cuota fija asignada a cada local comercial. El saldo se divide por habitante entre los 3 apartamentos.
+              </p>
+            </div>
+
+            <div class="glass-input-group">
+              <label for="waterBill">Valor Total Factura de Agua ($ COP):</label>
+              <div class="glass-input-wrapper">
+                <span class="input-prefix">$</span>
+                <input
+                  id="waterBill"
+                  type="text"
+                  inputmode="numeric"
+                  copMask
+                  class="glass-input has-prefix"
+                  placeholder="Ej. 180.000"
+                  [ngModel]="waterTotalBill"
+                  (ngModelChange)="waterTotalBill = $event; onWaterInputChange()"
+                />
+              </div>
+            </div>
+
+            <div class="glass-input-group">
+              <label for="waterCommercialStore">Cuota Fija por Local Comercial ($ COP):</label>
+              <div class="glass-input-wrapper">
+                <span class="input-prefix">$</span>
+                <input
+                  id="waterCommercialStore"
+                  type="text"
+                  inputmode="numeric"
+                  copMask
+                  class="glass-input has-prefix"
+                  placeholder="Ej. 10.000"
+                  [ngModel]="waterCommercialPerStore"
+                  (ngModelChange)="waterCommercialPerStore = $event; onWaterInputChange()"
+                />
+              </div>
+              <span class="input-help-text">
+                Deducción total para 3 locales: <strong>{{ formatMoney((waterCommercialPerStore || 0) * 3) }}</strong>
+              </span>
+            </div>
+
+            <div class="people-inputs-grid">
+              <div class="glass-input-group">
+                <label for="apt2People">Apto 2:</label>
+                <div class="glass-input-wrapper">
+                  <input
+                    id="apt2People"
+                    type="number"
+                    min="0"
+                    class="glass-input has-suffix"
+                    [(ngModel)]="waterApt2People"
+                    (ngModelChange)="onWaterInputChange()"
+                  />
+                  <span class="input-suffix">pers.</span>
+                </div>
+              </div>
+
+              <div class="glass-input-group">
+                <label for="apt3People">Apto 3:</label>
+                <div class="glass-input-wrapper">
+                  <input
+                    id="apt3People"
+                    type="number"
+                    min="0"
+                    class="glass-input has-suffix"
+                    [(ngModel)]="waterApt3People"
+                    (ngModelChange)="onWaterInputChange()"
+                  />
+                  <span class="input-suffix">pers.</span>
+                </div>
+              </div>
+
+              <div class="glass-input-group">
+                <label for="apt4People">Apto 4:</label>
+                <div class="glass-input-wrapper">
+                  <input
+                    id="apt4People"
+                    type="number"
+                    min="0"
+                    class="glass-input has-suffix"
+                    [(ngModel)]="waterApt4People"
+                    (ngModelChange)="onWaterInputChange()"
+                  />
+                  <span class="input-suffix">pers.</span>
+                </div>
+              </div>
+            </div>
+
+            @if (waterError) {
+              <div class="error-banner">⚠️ {{ waterError }}</div>
+            }
+
+            <!-- Live Status & Save History Button -->
+            <div class="live-action-bar">
+              <div class="live-status-indicator">
+                <span class="status-pulse-dot"></span>
+                <span>Actualización automática en vivo</span>
+              </div>
+
+              <button 
+                class="glass-btn btn-sm btn-ghost save-history-action" 
+                [class.saved]="savedService === 'water'"
+                (click)="saveWaterHistory()" 
+                type="button"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                  <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                </svg>
+                <span>{{ savedService === 'water' ? '✓ Guardado' : 'Guardar en Historial' }}</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Results Section -->
+          <div class="results-section">
+            @if (waterResult) {
+              <div class="results-container animate-fade-in">
+                <div class="results-primary-summary">
+                  <div class="summary-top-tag">
+                    <span class="badge-dot"></span>
+                    TOTAL A COBRAR POR UNIDAD (AGUA)
+                  </div>
+
+                  <div class="apartment-quick-cards">
+                    <!-- Locales Comerciales -->
+                    <div class="quick-apto-card commercial">
+                      <div class="card-left">
+                        <span class="apto-badge amber">Piso 1</span>
+                        <span class="apto-name">3 Locales Comerciales</span>
+                      </div>
+                      <div class="card-right">
+                        <span class="amount-value">{{ formatMoney(waterResult.commercialTotal) }}</span>
+                        <span class="sub-hint">{{ formatMoney(waterResult.commercialPerStore) }} c/u</span>
+                      </div>
+                    </div>
+
+                    <!-- Apt 2 -->
+                    <div class="quick-apto-card apt-2">
+                      <div class="card-left">
+                        <span class="apto-badge">Piso 2</span>
+                        <span class="apto-name">Apto 2</span>
+                      </div>
+                      <div class="card-right">
+                        <span class="amount-value">{{ formatMoney(waterResult.apt2Cost) }}</span>
+                        <span class="sub-hint">{{ waterResult.apt2People }} personas</span>
+                      </div>
+                    </div>
+
+                    <!-- Apt 3 -->
+                    <div class="quick-apto-card apt-3">
+                      <div class="card-left">
+                        <span class="apto-badge">Piso 3</span>
+                        <span class="apto-name">Apto 3</span>
+                      </div>
+                      <div class="card-right">
+                        <span class="amount-value">{{ formatMoney(waterResult.apt3Cost) }}</span>
+                        <span class="sub-hint">{{ waterResult.apt3People }} personas</span>
+                      </div>
+                    </div>
+
+                    <!-- Apt 4 -->
+                    <div class="quick-apto-card apt-4">
+                      <div class="card-left">
+                        <span class="apto-badge">Piso 4</span>
+                        <span class="apto-name">Apto 4</span>
+                      </div>
+                      <div class="card-right">
+                        <span class="amount-value">{{ formatMoney(waterResult.apt4Cost) }}</span>
+                        <span class="sub-hint">{{ waterResult.apt4People }} personas</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Progressive Disclosure Button -->
+                <button 
+                  class="toggle-details-btn" 
+                  (click)="toggleWaterDetails()" 
+                  type="button" 
+                  [attr.aria-expanded]="showWaterDetails"
+                >
+                  <span class="toggle-text">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <line x1="12" y1="16" x2="12" y2="12"></line>
+                      <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                    </svg>
+                    {{ showWaterDetails ? 'Ocultar desglose de cálculo por persona' : 'Ver desglose de cálculo por persona y deducciones' }}
+                  </span>
+                  <svg 
+                    class="chevron-icon" 
+                    [class.rotated]="showWaterDetails" 
+                    xmlns="http://www.w3.org/2000/svg" 
+                    width="16" 
+                    height="16" 
+                    viewBox="0 0 24 24" 
+                    fill="none" 
+                    stroke="currentColor" 
+                    stroke-width="2" 
+                    stroke-linecap="round" 
+                    stroke-linejoin="round"
+                  >
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </button>
+
+                <!-- Expandable Water Breakdown -->
+                @if (showWaterDetails) {
+                  <div class="expandable-details animate-fade-in">
+                    <div class="tech-metrics-bar">
+                      <div class="tech-metric">
+                        <span class="tech-label">Factura Total:</span>
+                        <span class="tech-val">{{ formatMoney(waterResult.totalBill) }}</span>
+                      </div>
+                      <div class="tech-metric">
+                        <span class="tech-label">Deducción 3 Locales:</span>
+                        <span class="tech-val">{{ formatMoney(waterResult.commercialTotal) }}</span>
+                      </div>
+                      <div class="tech-metric">
+                        <span class="tech-label">Tarifa / Persona:</span>
+                        <span class="tech-val highlight-cyan">{{ formatMoney(waterResult.costPerPerson) }}</span>
+                      </div>
+                      <div class="tech-metric">
+                        <span class="tech-label">Total Habitantes:</span>
+                        <span class="tech-val">{{ waterResult.totalPeople }} pers.</span>
+                      </div>
+                    </div>
+
+                    <div class="math-breakdown-box">
+                      <span class="math-title">Fórmula:</span>
+                      <code>({{ formatMoney(waterResult.totalBill) }} - {{ formatMoney(waterResult.commercialTotal) }}) ÷ {{ waterResult.totalPeople }} pers. = {{ formatMoney(waterResult.costPerPerson) }} /persona</code>
+                    </div>
+
+                    <button class="copy-summary-btn" (click)="copyServiceSummary('water')" type="button">
+                      {{ copiedService === 'water' ? '✓ Liquidación Copiada' : 'Copiar Liquidación de Agua' }}
+                    </button>
+                  </div>
+                }
+              </div>
+            }
           </div>
         </div>
+      }
 
-        <button class="glass-btn btn-primary btn-full" (click)="calculateGas(true)">
-          Calcular División de Gas
+      <!-- SERVICE 3: GAS NATURAL -->
+      @if (selectedService === 'gas') {
+        <div class="calculator-grid animate-fade-in">
+          <!-- Inputs Section with Live Recalculation -->
+          <div class="inputs-section">
+            <div class="service-intro-box">
+              <p>
+                División en 2 partes iguales (50% cada una) entre los apartamentos con punto de gas.
+              </p>
+            </div>
+
+            <div class="glass-input-group">
+              <label for="gasBill">Valor Total Factura de Gas ($ COP):</label>
+              <div class="glass-input-wrapper">
+                <span class="input-prefix">$</span>
+                <input
+                  id="gasBill"
+                  type="text"
+                  inputmode="numeric"
+                  copMask
+                  class="glass-input has-prefix"
+                  placeholder="Ej. 60.000"
+                  [ngModel]="gasTotalBill"
+                  (ngModelChange)="gasTotalBill = $event; onGasInputChange()"
+                />
+              </div>
+            </div>
+
+            <!-- Live Status & Save History Button -->
+            <div class="live-action-bar">
+              <div class="live-status-indicator">
+                <span class="status-pulse-dot"></span>
+                <span>Actualización automática en vivo</span>
+              </div>
+
+              <button 
+                class="glass-btn btn-sm btn-ghost save-history-action" 
+                [class.saved]="savedService === 'gas'"
+                (click)="saveGasHistory()" 
+                type="button"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                  <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                </svg>
+                <span>{{ savedService === 'gas' ? '✓ Guardado' : 'Guardar en Historial' }}</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Results Section -->
+          <div class="results-section">
+            @if (gasResult) {
+              <div class="results-container animate-fade-in">
+                <div class="results-primary-summary">
+                  <div class="summary-top-tag">
+                    <span class="badge-dot"></span>
+                    VALOR A PAGAR POR PARTE (GAS NATURAL)
+                  </div>
+
+                  <div class="apartment-quick-cards">
+                    <div class="quick-apto-card apt-3">
+                      <div class="card-left">
+                        <span class="apto-badge">50%</span>
+                        <span class="apto-name">Cuota Parte 1</span>
+                      </div>
+                      <div class="card-right">
+                        <span class="amount-value">{{ formatMoney(gasResult.shareAmount) }}</span>
+                        <span class="sub-hint">Mitad 1 de la factura</span>
+                      </div>
+                    </div>
+
+                    <div class="quick-apto-card apt-4">
+                      <div class="card-left">
+                        <span class="apto-badge">50%</span>
+                        <span class="apto-name">Cuota Parte 2</span>
+                      </div>
+                      <div class="card-right">
+                        <span class="amount-value">{{ formatMoney(gasResult.shareAmount) }}</span>
+                        <span class="sub-hint">Mitad 2 de la factura</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Progressive Disclosure Button -->
+                <button 
+                  class="toggle-details-btn" 
+                  (click)="toggleGasDetails()" 
+                  type="button" 
+                  [attr.aria-expanded]="showGasDetails"
+                >
+                  <span class="toggle-text">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <line x1="12" y1="16" x2="12" y2="12"></line>
+                      <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                    </svg>
+                    {{ showGasDetails ? 'Ocultar detalle de distribución' : 'Ver detalle de distribución del gas' }}
+                  </span>
+                  <svg 
+                    class="chevron-icon" 
+                    [class.rotated]="showGasDetails" 
+                    xmlns="http://www.w3.org/2000/svg" 
+                    width="16" 
+                    height="16" 
+                    viewBox="0 0 24 24" 
+                    fill="none" 
+                    stroke="currentColor" 
+                    stroke-width="2" 
+                    stroke-linecap="round" 
+                    stroke-linejoin="round"
+                  >
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </button>
+
+                <!-- Expandable Gas Breakdown -->
+                @if (showGasDetails) {
+                  <div class="expandable-details animate-fade-in">
+                    <div class="tech-metrics-bar">
+                      <div class="tech-metric">
+                        <span class="tech-label">Factura Total:</span>
+                        <span class="tech-val">{{ formatMoney(gasResult.totalBill) }}</span>
+                      </div>
+                      <div class="tech-metric">
+                        <span class="tech-label">División:</span>
+                        <span class="tech-val">50% / 50% (2 Partes)</span>
+                      </div>
+                    </div>
+
+                    <div class="math-breakdown-box">
+                      <span class="math-title">Fórmula:</span>
+                      <code>{{ formatMoney(gasResult.totalBill) }} ÷ 2 = {{ formatMoney(gasResult.shareAmount) }} por cuota</code>
+                    </div>
+
+                    <button class="copy-summary-btn" (click)="copyServiceSummary('gas')" type="button">
+                      {{ copiedService === 'gas' ? '✓ Liquidación Copiada' : 'Copiar Liquidación de Gas' }}
+                    </button>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+      <!-- Step Navigation Footer (Friendly Flow Controls) -->
+      <div class="step-nav-footer">
+        <button class="glass-btn btn-ghost btn-sm prev-step-btn" (click)="clearServiceSelection()" type="button">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+          <span>← Elegir otro Servicio</span>
+        </button>
+
+        <button class="glass-btn btn-primary btn-sm next-step-btn" (click)="goToOverview()" type="button">
+          <span>Ver Directorio & Resumen</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
         </button>
       </div>
-
-      <!-- Results Section: Highlighted Relevant Info First -->
-      <div class="results-section">
-        @if (gasResult) {
-          <div class="results-container animate-fade-in">
-            <!-- 1. Highlighted Relevant Info: Direct Halves -->
-            <div class="results-primary-summary">
-              <div class="summary-top-tag">
-                <span class="badge-dot"></span>
-                VALOR A PAGAR POR PARTE (GAS NATURAL)
-              </div>
-
-              <div class="apartment-quick-cards">
-                <div class="quick-apto-card apt-3">
-                  <div class="card-left">
-                    <span class="apto-badge">50%</span>
-                    <span class="apto-name">Cuota Parte 1</span>
-                  </div>
-                  <div class="card-right">
-                    <span class="amount-value">{{ formatMoney(gasResult.shareAmount) }}</span>
-                    <span class="sub-hint">Mitad 1 de la factura</span>
-                  </div>
-                </div>
-
-                <div class="quick-apto-card apt-4">
-                  <div class="card-left">
-                    <span class="apto-badge">50%</span>
-                    <span class="apto-name">Cuota Parte 2</span>
-                  </div>
-                  <div class="card-right">
-                    <span class="amount-value">{{ formatMoney(gasResult.shareAmount) }}</span>
-                    <span class="sub-hint">Mitad 2 de la factura</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- 2. Progressive Disclosure Button -->
-            <button 
-              class="toggle-details-btn" 
-              (click)="toggleGasDetails()" 
-              type="button" 
-              [attr.aria-expanded]="showGasDetails"
-            >
-              <span class="toggle-text">
-                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="12" cy="12" r="10"></circle>
-                  <line x1="12" y1="16" x2="12" y2="12"></line>
-                  <line x1="12" y1="8" x2="12.01" y2="8"></line>
-                </svg>
-                {{ showGasDetails ? 'Ocultar detalle de distribución' : 'Ver detalle de distribución del gas' }}
-              </span>
-              <svg 
-                class="chevron-icon" 
-                [class.rotated]="showGasDetails" 
-                xmlns="http://www.w3.org/2000/svg" 
-                width="16" 
-                height="16" 
-                viewBox="0 0 24 24" 
-                fill="none" 
-                stroke="currentColor" 
-                stroke-width="2" 
-                stroke-linecap="round" 
-                stroke-linejoin="round"
-              >
-                <polyline points="6 9 12 15 18 9"></polyline>
-              </svg>
-            </button>
-
-            <!-- 3. Expandable Gas Breakdown -->
-            @if (showGasDetails) {
-              <div class="expandable-details animate-fade-in">
-                <div class="tech-metrics-bar">
-                  <div class="tech-metric">
-                    <span class="tech-label">Factura Total:</span>
-                    <span class="tech-val">{{ formatMoney(gasResult.totalBill) }}</span>
-                  </div>
-                  <div class="tech-metric">
-                    <span class="tech-label">División:</span>
-                    <span class="tech-val">50% / 50% (2 Partes)</span>
-                  </div>
-                </div>
-
-                <div class="math-breakdown-box">
-                  <span class="math-title">Fórmula:</span>
-                  <code>{{ formatMoney(gasResult.totalBill) }} ÷ 2 = {{ formatMoney(gasResult.shareAmount) }} por cuota</code>
-                </div>
-
-                <button class="copy-summary-btn" (click)="copyServiceSummary('gas')" type="button">
-                  {{ copiedService === 'gas' ? '✓ Liquidación Copiada' : 'Copiar Liquidación de Gas' }}
-                </button>
-              </div>
-            }
-          </div>
-        }
-      </div>
     </div>
   }
-
-  <!-- Step Navigation Footer (Friendly Flow Controls) -->
-  <div class="step-nav-footer">
-    <button class="glass-btn btn-ghost btn-sm prev-step-btn" (click)="goToCanon()" type="button">
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="19" y1="12" x2="5" y2="12"></line>
-        <polyline points="12 19 5 12 12 5"></polyline>
-      </svg>
-      <span>Volver a Canon (Paso 1)</span>
-    </button>
-
-    <div class="step-indicator">
-      <span class="step-current">Paso 2 de 3:</span>
-      <span class="step-name">Servicios Públicos</span>
-    </div>
-
-    <button class="glass-btn btn-primary btn-sm next-step-btn" (click)="goToOverview()" type="button">
-      <span>Ver Resumen de Propiedad</span>
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="5" y1="12" x2="19" y2="12"></line>
-        <polyline points="12 5 19 12 12 19"></polyline>
-      </svg>
-    </button>
-  </div>
 </div>

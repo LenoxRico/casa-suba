@@ -22,9 +22,9 @@ describe('App', () => {
     expect(compiled.querySelector('.brand-title')?.textContent).toContain('Casa Suba');
   });
 
-  it('should default to canon tab', () => {
+  it('should default to home tab', () => {
     const fixture = TestBed.createComponent(App);
     const app = fixture.componentInstance;
-    expect(app.activeTab()).toBe('canon');
+    expect(app.activeTab()).toBe('home');
   });
 });

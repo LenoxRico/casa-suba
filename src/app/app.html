@@ -4,133 +4,165 @@
 
   <!-- Dashboard Main Content Container -->
   <div class="dashboard-content">
-    <!-- Minimalist Property Status Strip -->
-    <div class="dashboard-quick-stats">
-      <div class="stat-item">
-        <span class="stat-label">Inmueble</span>
-        <span class="stat-value">Casa Suba</span>
-      </div>
-      <div class="stat-divider"></div>
-      <div class="stat-item">
-        <span class="stat-label">Capacidad</span>
-        <span class="stat-value">6 Unidades (3 Locales + 3 Apartamentos)</span>
-      </div>
-      <div class="stat-divider"></div>
-      <div class="stat-item">
-        <span class="stat-label">Servicios Comunes</span>
-        <span class="stat-value">Agua • Energía • Gas</span>
-      </div>
-      <div class="stat-divider"></div>
-      <div class="stat-item">
-        <span class="stat-label">Estado</span>
-        <span class="stat-value highlight-status">
-          <span class="status-pulse"></span>
-          Liquidación Activa
-        </span>
-      </div>
-    </div>
-
-    <!-- Navigation Segmented Control Bar -->
-    <nav class="dashboard-nav glass-panel-light">
-      <!-- Desktop Segmented Tab Buttons -->
-      <div class="nav-tabs-desktop" role="tablist">
-        <button
-          class="nav-tab-btn"
-          role="tab"
-          [attr.aria-selected]="activeTab() === 'canon'"
-          [class.active]="activeTab() === 'canon'"
-          (click)="setTab('canon')"
-        >
-          <span class="tab-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
-              <polyline points="17 6 23 6 23 12"/>
-            </svg>
+    @if (activeTab() === 'home') {
+      <!-- MOBILE-LIKE HOME HUB / MENU PRINCIPAL -->
+      <section class="home-hub animate-fade-in">
+        <div class="hub-hero">
+          <span class="hub-pill">
+            <span class="hub-pulse"></span>
+            Sistema de Administración Casa Suba
           </span>
-          <span class="tab-text">1. Incremento Canon (IPC)</span>
-          <span class="tab-badge">IPC</span>
-        </button>
+          <h2 class="hub-title">¿Qué deseas hacer hoy?</h2>
+          <p class="hub-subtitle">Selecciona una opción para gestionar arriendos, liquidar servicios o consultar unidades</p>
+        </div>
 
-        <button
-          class="nav-tab-btn"
-          role="tab"
-          [attr.aria-selected]="activeTab() === 'utilities'"
-          [class.active]="activeTab() === 'utilities'"
-          (click)="setTab('utilities')"
-        >
-          <span class="tab-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
-            </svg>
-          </span>
-          <span class="tab-text">2. Servicios Públicos</span>
-          <span class="tab-badge">Agua / Luz / Gas</span>
-        </button>
+        <div class="hub-cards-grid">
+          <!-- Option 1: Canon IPC -->
+          <button class="hub-action-card card-canon glass-panel" (click)="setTab('canon')" type="button">
+            <div class="card-icon-wrap icon-purple">
+              <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                <polyline points="17 6 23 6 23 12"></polyline>
+              </svg>
+            </div>
+            <div class="card-text-wrap">
+              <div class="card-header-row">
+                <span class="card-step-tag">Opción 1</span>
+                <span class="card-badge badge-purple">Cálculo Instantáneo</span>
+              </div>
+              <h3 class="card-title">1. Ver Incremento del IPC (Canon)</h3>
+              <p class="card-desc">Calcula en tiempo real el nuevo canon de arriendo aplicando la tasa anual oficial del IPC.</p>
+            </div>
+            <div class="card-arrow">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </div>
+          </button>
 
-        <button
-          class="nav-tab-btn"
-          role="tab"
-          [attr.aria-selected]="activeTab() === 'overview'"
-          [class.active]="activeTab() === 'overview'"
-          (click)="setTab('overview')"
-        >
-          <span class="tab-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="3" y="3" width="7" height="7"/>
-              <rect x="14" y="3" width="7" height="7"/>
-              <rect x="14" y="14" width="7" height="7"/>
-              <rect x="3" y="14" width="7" height="7"/>
-            </svg>
-          </span>
-          <span class="tab-text">3. Resumen de Propiedad</span>
-          <span class="tab-badge">Directorio</span>
-        </button>
-      </div>
+          <!-- Option 2: Utilities -->
+          <button class="hub-action-card card-utilities glass-panel" (click)="setTab('utilities')" type="button">
+            <div class="card-icon-wrap icon-cyan">
+              <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+              </svg>
+            </div>
+            <div class="card-text-wrap">
+              <div class="card-header-row">
+                <span class="card-step-tag">Opción 2</span>
+                <span class="card-badge badge-cyan">Energía • Agua • Gas</span>
+              </div>
+              <h3 class="card-title">2. Calcular Servicios Públicos</h3>
+              <p class="card-desc">Elige entre Energía, Agua o Gas para distribuir de forma exacta los recibos entre apartamentos y locales.</p>
+            </div>
+            <div class="card-arrow">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </div>
+          </button>
 
-      <!-- Mobile Dropdown Selector for small screens -->
-      <div class="nav-tabs-mobile">
-        <label for="mobileMainTabSelect" class="mobile-main-nav-label">
-          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="4" y1="6" x2="20" y2="6"/>
-            <line x1="4" y1="12" x2="20" y2="12"/>
-            <line x1="4" y1="18" x2="20" y2="18"/>
-          </svg>
-          Módulo de Liquidación:
-        </label>
-        <div class="mobile-select-wrapper">
-          <select
-            id="mobileMainTabSelect"
-            class="glass-input mobile-main-tab-select"
-            [ngModel]="activeTab()"
-            (ngModelChange)="setTab($event)"
-          >
-            <option value="canon">1. Incremento Canon (IPC)</option>
-            <option value="utilities">2. Servicios Públicos (Agua, Energía, Gas)</option>
-            <option value="overview">3. Resumen de Propiedad & Historial</option>
-          </select>
-          <div class="select-chevron">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="6 9 12 15 18 9"/>
-            </svg>
+          <!-- Option 3: Overview -->
+          <button class="hub-action-card card-overview glass-panel" (click)="setTab('overview')" type="button">
+            <div class="card-icon-wrap icon-emerald">
+              <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 21h18"></path>
+                <path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"></path>
+                <path d="M9 9h1"></path>
+                <path d="M9 13h1"></path>
+                <path d="M9 17h1"></path>
+                <path d="M14 9h1"></path>
+                <path d="M14 13h1"></path>
+                <path d="M14 17h1"></path>
+              </svg>
+            </div>
+            <div class="card-text-wrap">
+              <div class="card-header-row">
+                <span class="card-step-tag">Opción 3</span>
+                <span class="card-badge badge-emerald">6 Unidades</span>
+              </div>
+              <h3 class="card-title">3. Ver Directorio & Resumen</h3>
+              <p class="card-desc">Consulta el inventario de los 3 locales comerciales, 3 apartamentos y el registro de liquidaciones.</p>
+            </div>
+            <div class="card-arrow">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </div>
+          </button>
+        </div>
+
+        <!-- Property Quick Info Bar -->
+        <div class="hub-quick-strip glass-panel-light">
+          <div class="strip-item">
+            <span class="strip-dot"></span>
+            <span><strong>3 Locales Comerciales</strong> (Piso 1)</span>
+          </div>
+          <div class="strip-divider">•</div>
+          <div class="strip-item">
+            <span class="strip-dot"></span>
+            <span><strong>3 Apartamentos</strong> (Pisos 2, 3 y 4)</span>
+          </div>
+          <div class="strip-divider">•</div>
+          <div class="strip-item">
+            <span>Suba, Bogotá D.C.</span>
           </div>
         </div>
-      </div>
-    </nav>
+      </section>
+    } @else {
+      <!-- NAVIGATION HEADER INSIDE MODULES (RETURN TO HOME) -->
+      <nav class="module-top-navigation animate-fade-in" aria-label="Navegación del módulo">
+        <button class="back-to-home-btn" (click)="setTab('home')" type="button">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+          <span>Menú Principal</span>
+        </button>
 
-    <!-- Tab Content Switcher -->
-    <div class="tab-content-area">
-      @switch (activeTab()) {
-        @case ('canon') {
-          <app-canon-calculator (navigateTab)="setTab($event)"></app-canon-calculator>
+        <!-- Quick Switcher Between Modules -->
+        <div class="module-switcher-chips">
+          <button 
+            class="module-chip" 
+            [class.active]="activeTab() === 'canon'" 
+            (click)="setTab('canon')" 
+            type="button"
+          >
+            📈 1. Canon IPC
+          </button>
+          <button 
+            class="module-chip" 
+            [class.active]="activeTab() === 'utilities'" 
+            (click)="setTab('utilities')" 
+            type="button"
+          >
+            ⚡ 2. Servicios
+          </button>
+          <button 
+            class="module-chip" 
+            [class.active]="activeTab() === 'overview'" 
+            (click)="setTab('overview')" 
+            type="button"
+          >
+            🏢 3. Resumen
+          </button>
+        </div>
+      </nav>
+
+      <!-- Active Module View -->
+      <div class="tab-content-area">
+        @switch (activeTab()) {
+          @case ('canon') {
+            <app-canon-calculator (navigateTab)="setTab($event)"></app-canon-calculator>
+          }
+          @case ('utilities') {
+            <app-utilities-calculator (navigateTab)="setTab($event)"></app-utilities-calculator>
+          }
+          @case ('overview') {
+            <app-property-overview (navigateTab)="setTab($event)"></app-property-overview>
+          }
         }
-        @case ('utilities') {
-          <app-utilities-calculator (navigateTab)="setTab($event)"></app-utilities-calculator>
-        }
-        @case ('overview') {
-          <app-property-overview (navigateTab)="setTab($event)"></app-property-overview>
-        }
-      }
-    </div>
+      </div>
+    }
   </div>
 
   <!-- Minimalist Glass Footer -->
@@ -139,7 +171,7 @@
       <div class="footer-left">
         <span class="footer-brand">Casa Suba</span>
         <span class="footer-dot">•</span>
-        <span class="footer-text">Sistema de Administración de Inmuebles (3 Locales Comerciales & 3 Apartamentos)</span>
+        <span class="footer-text">Sistema de Administración de Inmuebles (3 Locales & 3 Apartamentos)</span>
       </div>
       <div class="footer-right">
         <span class="footer-tag font-mono">Marlen Rico Florido</span>

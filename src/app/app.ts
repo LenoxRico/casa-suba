@@ -6,7 +6,7 @@ import { CanonCalculatorComponent } from './components/canon-calculator/canon-ca
 import { UtilitiesCalculatorComponent } from './components/utilities-calculator/utilities-calculator.component';
 import { PropertyOverviewComponent } from './components/property-overview/property-overview.component';
 
-export type DashboardTab = 'canon' | 'utilities' | 'overview';
+export type DashboardTab = 'home' | 'canon' | 'utilities' | 'overview';
 
 @Component({
   selector: 'app-root',
@@ -23,11 +23,15 @@ export type DashboardTab = 'canon' | 'utilities' | 'overview';
   styleUrl: './app.scss'
 })
 export class App {
-  public activeTab = signal<DashboardTab>('canon');
+  // Mobile-app like home navigation hub as the initial screen
+  public activeTab = signal<DashboardTab>('home');
 
   public setTab(tab: DashboardTab | string): void {
-    if (tab === 'canon' || tab === 'utilities' || tab === 'overview') {
+    if (tab === 'home' || tab === 'canon' || tab === 'utilities' || tab === 'overview') {
       this.activeTab.set(tab);
+      if (typeof window !== 'undefined') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
     }
   }
 }

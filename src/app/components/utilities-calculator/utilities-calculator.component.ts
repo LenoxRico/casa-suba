@@ -24,6 +24,8 @@ export class UtilitiesCalculatorComponent {
   // Navigation Output to allow parent tab switching
   @Output() navigateTab = new EventEmitter<string>();
 
+  // Selected service: null presents the initial selection question screen ("¿Qué servicio deseas calcular?")
+  public selectedService: ServiceType | null = null;
   public activeService: ServiceType = 'energy';
 
   // Progressive Disclosure: Collapsible details states per service
@@ -31,6 +33,7 @@ export class UtilitiesCalculatorComponent {
   public showWaterDetails: boolean = false;
   public showGasDetails: boolean = false;
   public copiedService: string | null = null;
+  public savedService: string | null = null;
 
   // --- Energy Form Inputs ---
   public energyTotalBill: number | null = 250000;
@@ -54,19 +57,26 @@ export class UtilitiesCalculatorComponent {
   public gasResult: GasCalculation | null = null;
 
   constructor() {
-    // Run initial calculation for default state display without recording to history
+    // Pre-calculate initial default values for rendering preview
     this.calculateEnergy(false);
+    this.calculateWater(false);
+    this.calculateGas(false);
   }
 
   public selectService(service: ServiceType): void {
+    this.selectedService = service;
     this.activeService = service;
-    if (service === 'energy' && !this.energyResult) {
+    if (service === 'energy') {
       this.calculateEnergy(false);
-    } else if (service === 'water' && !this.waterResult) {
+    } else if (service === 'water') {
       this.calculateWater(false);
-    } else if (service === 'gas' && !this.gasResult) {
+    } else if (service === 'gas') {
       this.calculateGas(false);
     }
+  }
+
+  public clearServiceSelection(): void {
+    this.selectedService = null;
   }
 
   public toggleEnergyDetails(): void {
@@ -81,7 +91,20 @@ export class UtilitiesCalculatorComponent {
     this.showGasDetails = !this.showGasDetails;
   }
 
-  // --- Calculations (saveHistory defaults to false, true only on button click) ---
+  // --- Reactive Real-time Change Handlers ---
+  public onEnergyInputChange(): void {
+    this.calculateEnergy(false);
+  }
+
+  public onWaterInputChange(): void {
+    this.calculateWater(false);
+  }
+
+  public onGasInputChange(): void {
+    this.calculateGas(false);
+  }
+
+  // --- Calculations (saveHistory defaults to false, true only on explicit action) ---
   public calculateEnergy(saveHistory: boolean = false): void {
     this.energyError = null;
 
@@ -152,6 +175,28 @@ export class UtilitiesCalculatorComponent {
     this.gasResult = this.calculatorService.calculateGas(this.gasTotalBill, saveHistory);
   }
 
+  public saveEnergyHistory(): void {
+    this.calculateEnergy(true);
+    this.notifySaved('energy');
+  }
+
+  public saveWaterHistory(): void {
+    this.calculateWater(true);
+    this.notifySaved('water');
+  }
+
+  public saveGasHistory(): void {
+    this.calculateGas(true);
+    this.notifySaved('gas');
+  }
+
+  private notifySaved(service: string): void {
+    this.savedService = service;
+    setTimeout(() => {
+      this.savedService = null;
+    }, 2500);
+  }
+
   public formatMoney(amount: number): string {
     return this.calculatorService.formatCurrency(amount);
   }
@@ -159,6 +204,10 @@ export class UtilitiesCalculatorComponent {
   public getEnergySharePercent(aptKwh: number, totalKwh: number): string {
     if (!totalKwh || totalKwh === 0) return '0%';
     return ((aptKwh / totalKwh) * 100).toFixed(1) + '%';
+  }
+
+  public goToHome(): void {
+    this.navigateTab.emit('home');
   }
 
   public goToCanon(): void {

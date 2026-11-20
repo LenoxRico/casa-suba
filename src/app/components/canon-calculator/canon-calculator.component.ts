@@ -28,6 +28,7 @@ export class CanonCalculatorComponent implements OnInit {
   // Progressive Disclosure: Collapsible details state
   public showDetails: boolean = false;
   public copied: boolean = false;
+  public savedToHistory: boolean = false;
 
   // Synchronized IPC Percentage property linked bi-directionally to IpcService signal
   public get ipcPercentage(): number {
@@ -38,7 +39,7 @@ export class CanonCalculatorComponent implements OnInit {
     const numericVal = Number(val);
     if (!isNaN(numericVal) && numericVal >= 0) {
       this.ipcService.updateIpcRate(numericVal, this.saveIpcToStorage);
-      this.calculate(false); // Update display preview without recording history
+      this.calculate(false); // Update display preview immediately in real-time
     }
   }
 
@@ -56,7 +57,13 @@ export class CanonCalculatorComponent implements OnInit {
   public result: CanonCalculation | null = null;
 
   ngOnInit(): void {
-    // Auto calculate initial default values for rendering without saving to history
+    // Auto calculate initial default values for rendering immediately
+    this.calculate(false);
+  }
+
+  // Reactive handler on rent input change for real-time recalculation without clicking buttons
+  public onRentChange(val: number | null): void {
+    this.currentRent = val;
     this.calculate(false);
   }
 
@@ -71,10 +78,11 @@ export class CanonCalculatorComponent implements OnInit {
 
   public setIpcPreset(presetValue: number): void {
     this.ipcPercentage = presetValue;
+    this.calculate(false);
   }
 
-  // Calculation method: saveHistory defaults to true when triggered explicitly by button click
-  public calculate(saveHistory: boolean = true): void {
+  // Calculation method: saveHistory defaults to true when triggered explicitly
+  public calculate(saveHistory: boolean = false): void {
     if (this.currentRent === null || this.currentRent < 0) {
       return;
     }
@@ -86,6 +94,15 @@ export class CanonCalculatorComponent implements OnInit {
     );
   }
 
+  // Explicit action to record current calculation to the history log
+  public saveToHistory(): void {
+    this.calculate(true);
+    this.savedToHistory = true;
+    setTimeout(() => {
+      this.savedToHistory = false;
+    }, 2500);
+  }
+
   public formatMoney(amount: number): string {
     return this.calculatorService.formatCurrency(amount);
   }
@@ -93,6 +110,10 @@ export class CanonCalculatorComponent implements OnInit {
   public resetForm(): void {
     this.currentRent = 1200000;
     this.calculate(false);
+  }
+
+  public goToHome(): void {
+    this.navigateTab.emit('home');
   }
 
   public goToUtilities(): void {
