@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IpcService } from '../../services/ipc.service';
+import { ThemeService } from '../../services/theme.service';
 
 @Component({
   selector: 'app-header',
@@ -12,6 +13,7 @@ import { IpcService } from '../../services/ipc.service';
 })
 export class HeaderComponent {
   public ipcService = inject(IpcService);
+  public themeService = inject(ThemeService);
 
   public showIpcModal = false;
   public tempIpcValue: number = 0;

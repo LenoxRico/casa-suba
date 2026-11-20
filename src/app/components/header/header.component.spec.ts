@@ -43,4 +43,12 @@ describe('HeaderComponent Modal Behavior', () => {
     expect(component.showIpcModal).toBe(false);
     expect(ipcService.ipcRate()).toBe(9.28); // Value updated!
   });
+
+  it('should toggle theme using ThemeService', () => {
+    component.themeService.setTheme('dark');
+    expect(component.themeService.isDark()).toBe(true);
+
+    component.themeService.toggleTheme();
+    expect(component.themeService.isDark()).toBe(false);
+  });
 });
