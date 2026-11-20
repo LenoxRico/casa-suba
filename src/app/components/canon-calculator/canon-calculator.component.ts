@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { CalculatorService } from '../../services/calculator.service';
 import { IpcService } from '../../services/ipc.service';
 import { CanonCalculation, PropertyUnit } from '../../models/property.model';
+import { CopMaskDirective } from '../../directives/cop-mask.directive';
 
 @Component({
   selector: 'app-canon-calculator',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, CopMaskDirective],
   templateUrl: './canon-calculator.component.html',
   styleUrl: './canon-calculator.component.scss'
 })

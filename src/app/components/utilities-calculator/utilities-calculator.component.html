@@ -135,9 +135,11 @@
             <span class="input-prefix">$</span>
             <input
               id="energyBill"
-              type="number"
+              type="text"
+              inputmode="numeric"
+              copMask
               class="glass-input has-prefix"
-              placeholder="Ej. 250,000"
+              placeholder="Ej. 250.000"
               [(ngModel)]="energyTotalBill"
               (keyup.enter)="calculateEnergy(true)"
             />
@@ -150,7 +152,9 @@
             <span class="input-prefix">$</span>
             <input
               id="energyPrice"
-              type="number"
+              type="text"
+              inputmode="numeric"
+              copMask
               class="glass-input has-prefix"
               placeholder="Ej. 850"
               [(ngModel)]="energyPricePerKwh"
@@ -333,9 +337,11 @@
             <span class="input-prefix">$</span>
             <input
               id="waterBill"
-              type="number"
+              type="text"
+              inputmode="numeric"
+              copMask
               class="glass-input has-prefix"
-              placeholder="Ej. 180,000"
+              placeholder="Ej. 180.000"
               [(ngModel)]="waterTotalBill"
               (keyup.enter)="calculateWater(true)"
             />
@@ -348,9 +354,11 @@
             <span class="input-prefix">$</span>
             <input
               id="waterCommercialStore"
-              type="number"
+              type="text"
+              inputmode="numeric"
+              copMask
               class="glass-input has-prefix"
-              placeholder="Ej. 10,000"
+              placeholder="Ej. 10.000"
               [(ngModel)]="waterCommercialPerStore"
               (keyup.enter)="calculateWater(true)"
             />
@@ -565,9 +573,11 @@
             <span class="input-prefix">$</span>
             <input
               id="gasBill"
-              type="number"
+              type="text"
+              inputmode="numeric"
+              copMask
               class="glass-input has-prefix"
-              placeholder="Ej. 60,000"
+              placeholder="Ej. 60.000"
               [(ngModel)]="gasTotalBill"
               (keyup.enter)="calculateGas(true)"
             />

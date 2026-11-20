@@ -7,13 +7,14 @@ import {
   WaterCalculation,
   GasCalculation
 } from '../../models/property.model';
+import { CopMaskDirective } from '../../directives/cop-mask.directive';
 
 export type ServiceType = 'energy' | 'water' | 'gas';
 
 @Component({
   selector: 'app-utilities-calculator',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, CopMaskDirective],
   templateUrl: './utilities-calculator.component.html',
   styleUrl: './utilities-calculator.component.scss'
 })

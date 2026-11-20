@@ -54,9 +54,11 @@
           <span class="input-prefix">$</span>
           <input
             id="currentRentInput"
-            type="number"
+            type="text"
+            inputmode="numeric"
+            copMask
             class="glass-input has-prefix"
-            placeholder="Ej. 1,200,000"
+            placeholder="Ej. 1.200.000"
             [(ngModel)]="currentRent"
             (keyup.enter)="calculate()"
           />
