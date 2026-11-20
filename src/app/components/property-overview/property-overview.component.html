@@ -84,4 +84,28 @@
       </div>
     }
   </div>
+
+  <!-- Step Navigation Footer (Friendly Flow Controls) -->
+  <div class="step-nav-footer">
+    <button class="glass-btn btn-ghost btn-sm prev-step-btn" (click)="goToUtilities()" type="button">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="19" y1="12" x2="5" y2="12"></line>
+        <polyline points="12 19 5 12 12 5"></polyline>
+      </svg>
+      <span>Volver a Servicios (Paso 2)</span>
+    </button>
+
+    <div class="step-indicator">
+      <span class="step-current">Paso 3 de 3:</span>
+      <span class="step-name">Directorio & Historial</span>
+    </div>
+
+    <button class="glass-btn btn-primary btn-sm next-step-btn" (click)="goToCanon()" type="button">
+      <span>Nueva Liquidación de Canon</span>
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="23 4 23 10 17 10"></polyline>
+        <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+      </svg>
+    </button>
+  </div>
 </div>

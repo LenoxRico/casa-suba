@@ -5,8 +5,8 @@
       <div class="icon-badge purple-glow">
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
+          width="22"
+          height="22"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -21,11 +21,11 @@
       <div>
         <h2 class="section-title">1. Verificación del Nuevo Canon de Arrendamiento</h2>
         <p class="section-subtitle">
-          Calcula la actualización del canon aplicando el incremento anual del IPC
+          Actualización anual del canon con base en la tasa oficial de inflación (IPC)
         </p>
       </div>
     </div>
-    <span class="glass-badge badge-purple">Arriendos</span>
+    <span class="glass-badge badge-purple">Módulo Arriendos</span>
   </div>
 
   <div class="calculator-grid">
@@ -36,8 +36,8 @@
         <label for="currentRentInput">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
+            width="15"
+            height="15"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -68,8 +68,8 @@
         <label for="ipcInput">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
+            width="15"
+            height="15"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -129,8 +129,8 @@
         <button class="glass-btn btn-primary btn-full" (click)="calculate()">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="18"
-            height="18"
+            width="16"
+            height="16"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -154,110 +154,146 @@
       </div>
     </div>
 
-    <!-- Results Output Section -->
+    <!-- Results Output Section (Highlighted Relevant Info First) -->
     <div class="results-section">
       @if (result) {
         <div class="results-container animate-fade-in">
-          <div class="result-hero-card glass-panel-light">
-            <span class="result-label">NUEVO CANON DE ARRENDAMIENTO</span>
+          <!-- 1. Primary Highlighted Relevant Info Card -->
+          <div class="result-hero-card">
+            <div class="hero-top-badge">
+              <span class="badge-dot"></span>
+              NUEVO CANON DE ARRENDAMIENTO A PAGAR
+            </div>
             <div class="result-main-value">{{ formatMoney(result.newRent) }}</div>
-            <div class="result-sub-tag">
-              Incremento del {{ result.ipcPercentage }}% aplicado al canon actual
+            <div class="result-summary-row">
+              <span class="difference-pill">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="12" y1="19" x2="12" y2="5"></line>
+                  <polyline points="5 12 12 5 19 12"></polyline>
+                </svg>
+                Aumento: +{{ formatMoney(result.ipcDifference) }} /mes
+              </span>
+              <span class="rate-indicator">IPC aplicado: {{ result.ipcPercentage }}%</span>
             </div>
           </div>
 
-          <div class="result-metrics-grid">
-            <!-- Difference Card -->
-            <div class="metric-card glass-panel">
-              <div class="metric-icon purple">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
-                  <polyline points="17 6 23 6 23 12" />
-                </svg>
-              </div>
-              <div class="metric-info">
-                <span class="metric-title">Diferencia (Incremento)</span>
-                <span class="metric-value positive"
-                  >+{{ formatMoney(result.ipcDifference) }} /mes</span
-                >
-              </div>
-            </div>
+          <!-- 2. Interactive Progressive Disclosure Button -->
+          <button 
+            class="toggle-details-btn" 
+            (click)="toggleDetails()" 
+            type="button" 
+            [attr.aria-expanded]="showDetails"
+          >
+            <span class="toggle-text">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="16" x2="12" y2="12"></line>
+                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+              </svg>
+              {{ showDetails ? 'Ocultar desglose detallado' : 'Ver más detalle y base de cálculo' }}
+            </span>
+            <svg 
+              class="chevron-icon" 
+              [class.rotated]="showDetails" 
+              xmlns="http://www.w3.org/2000/svg" 
+              width="16" 
+              height="16" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              stroke="currentColor" 
+              stroke-width="2" 
+              stroke-linecap="round" 
+              stroke-linejoin="round"
+            >
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
 
-            <!-- Current Rent Reference -->
-            <div class="metric-card glass-panel">
-              <div class="metric-icon muted">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-                </svg>
-              </div>
-              <div class="metric-info">
-                <span class="metric-title">Canon Actual Anterior</span>
-                <span class="metric-value">{{ formatMoney(result.currentRent) }} /mes</span>
-              </div>
-            </div>
+          <!-- 3. Expandable Accordion with Secondary Detailed Metrics -->
+          @if (showDetails) {
+            <div class="expandable-details animate-fade-in">
+              <div class="result-metrics-grid">
+                <!-- Current Rent Reference -->
+                <div class="metric-card glass-panel">
+                  <div class="metric-icon muted">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                    </svg>
+                  </div>
+                  <div class="metric-info">
+                    <span class="metric-title">Canon Anterior (Base)</span>
+                    <span class="metric-value">{{ formatMoney(result.currentRent) }} /mes</span>
+                  </div>
+                </div>
 
-            <!-- Annual Cumulative Projection -->
-            <div class="metric-card glass-panel full-width">
-              <div class="metric-icon cyan">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-                  <line x1="16" y1="2" x2="16" y2="6" />
-                  <line x1="8" y1="2" x2="8" y2="6" />
-                  <line x1="3" y1="10" x2="21" y2="10" />
-                </svg>
+                <!-- Annual Cumulative Projection -->
+                <div class="metric-card glass-panel">
+                  <div class="metric-icon cyan">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                      <line x1="16" y1="2" x2="16" y2="6" />
+                      <line x1="8" y1="2" x2="8" y2="6" />
+                      <line x1="3" y1="10" x2="21" y2="10" />
+                    </svg>
+                  </div>
+                  <div class="metric-info">
+                    <span class="metric-title">Aumento Anual (12 meses)</span>
+                    <span class="metric-value highlight"
+                      >+{{ formatMoney(result.annualDifference) }} /año</span
+                    >
+                  </div>
+                </div>
               </div>
-              <div class="metric-info">
-                <span class="metric-title">Diferencia Acumulada Anual (12 meses)</span>
-                <span class="metric-value highlight"
-                  >+{{ formatMoney(result.annualDifference) }} /año</span
-                >
-              </div>
-            </div>
-          </div>
 
-          <div class="calculation-footnote">
-            💡 <strong>Nota legal en Colombia:</strong> El incremento del canon en viviendas urbanas
-            (Ley 820 de 2003) no puede superar el 100% del IPC del año anterior ni el 1% del valor
-            comercial del inmueble.
-          </div>
+              <!-- Mathematical Breakdown Box -->
+              <div class="math-breakdown-box">
+                <span class="math-title">Fórmula aplicada:</span>
+                <code>{{ formatMoney(result.currentRent) }} × (1 + {{ result.ipcPercentage }}%) = {{ formatMoney(result.newRent) }}</code>
+              </div>
+
+              <!-- Legal Reference Footnote -->
+              <div class="calculation-footnote">
+                <strong>Marco Legal (Ley 820 de 2003):</strong> En Colombia, el canon de vivienda urbana no puede incrementarse por encima del 100% del IPC causado en el año inmediatamente anterior ni exceder el 1% del valor comercial del inmueble.
+              </div>
+
+              <!-- Quick Copy Button -->
+              <button class="copy-summary-btn" (click)="copySummary()" type="button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                {{ copied ? '✓ Resumen Copiado al Portapapeles' : 'Copiar Resumen para el Inquilino' }}
+              </button>
+            </div>
+          }
         </div>
       } @else {
         <div class="empty-state glass-panel">
           <div class="empty-icon">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="48"
-              height="48"
+              width="44"
+              height="44"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -274,11 +310,25 @@
           </div>
           <h3>Ingresa los datos del canon</h3>
           <p>
-            Digita el valor actual y el porcentaje de IPC, luego presiona "Calcular Nuevo Canon"
-            para ver la comparación.
+            Digita el valor actual y el porcentaje de IPC para obtener la liquidación inmediata.
           </p>
         </div>
       }
     </div>
+  </div>
+
+  <!-- Step Navigation Footer (Friendly Flow Controls) -->
+  <div class="step-nav-footer">
+    <div class="step-indicator">
+      <span class="step-current">Paso 1 de 3:</span>
+      <span class="step-name">Actualización de Canon</span>
+    </div>
+    <button class="glass-btn btn-primary btn-sm next-step-btn" (click)="goToUtilities()" type="button">
+      <span>Continuar a Servicios Públicos</span>
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+        <polyline points="12 5 19 12 12 19"></polyline>
+      </svg>
+    </button>
   </div>
 </div>

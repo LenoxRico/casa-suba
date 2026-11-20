@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, EventEmitter, inject, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CalculatorService } from '../../services/calculator.service';
@@ -20,7 +20,16 @@ export type ServiceType = 'energy' | 'water' | 'gas';
 export class UtilitiesCalculatorComponent {
   private calculatorService = inject(CalculatorService);
 
+  // Navigation Output to allow parent tab switching
+  @Output() navigateTab = new EventEmitter<string>();
+
   public activeService: ServiceType = 'energy';
+
+  // Progressive Disclosure: Collapsible details states per service
+  public showEnergyDetails: boolean = false;
+  public showWaterDetails: boolean = false;
+  public showGasDetails: boolean = false;
+  public copiedService: string | null = null;
 
   // --- Energy Form Inputs ---
   public energyTotalBill: number | null = 250000;
@@ -57,6 +66,18 @@ export class UtilitiesCalculatorComponent {
     } else if (service === 'gas' && !this.gasResult) {
       this.calculateGas(false);
     }
+  }
+
+  public toggleEnergyDetails(): void {
+    this.showEnergyDetails = !this.showEnergyDetails;
+  }
+
+  public toggleWaterDetails(): void {
+    this.showWaterDetails = !this.showWaterDetails;
+  }
+
+  public toggleGasDetails(): void {
+    this.showGasDetails = !this.showGasDetails;
   }
 
   // --- Calculations (saveHistory defaults to false, true only on button click) ---
@@ -137,5 +158,31 @@ export class UtilitiesCalculatorComponent {
   public getEnergySharePercent(aptKwh: number, totalKwh: number): string {
     if (!totalKwh || totalKwh === 0) return '0%';
     return ((aptKwh / totalKwh) * 100).toFixed(1) + '%';
+  }
+
+  public goToCanon(): void {
+    this.navigateTab.emit('canon');
+  }
+
+  public goToOverview(): void {
+    this.navigateTab.emit('overview');
+  }
+
+  public copyServiceSummary(type: 'energy' | 'water' | 'gas'): void {
+    let text = '';
+    if (type === 'energy' && this.energyResult) {
+      text = `Casa Suba - Liquidación Energía:\nTotal Factura: ${this.formatMoney(this.energyResult.totalBill)}\n• Apto 2: ${this.formatMoney(this.energyResult.apt2Cost)} (${this.energyResult.apt2Kwh.toFixed(1)} kWh)\n• Apto 3: ${this.formatMoney(this.energyResult.apt3Cost)} (${this.energyResult.apt3Kwh.toFixed(1)} kWh)\n• Apto 4: ${this.formatMoney(this.energyResult.apt4Cost)} (${this.energyResult.apt4Kwh.toFixed(1)} kWh)`;
+    } else if (type === 'water' && this.waterResult) {
+      text = `Casa Suba - Liquidación Agua:\nTotal Factura: ${this.formatMoney(this.waterResult.totalBill)}\n• 3 Locales: ${this.formatMoney(this.waterResult.commercialTotal)} (${this.formatMoney(this.waterResult.commercialPerStore)} c/u)\n• Apto 2 (${this.waterResult.apt2People} pers): ${this.formatMoney(this.waterResult.apt2Cost)}\n• Apto 3 (${this.waterResult.apt3People} pers): ${this.formatMoney(this.waterResult.apt3Cost)}\n• Apto 4 (${this.waterResult.apt4People} pers): ${this.formatMoney(this.waterResult.apt4Cost)}`;
+    } else if (type === 'gas' && this.gasResult) {
+      text = `Casa Suba - Liquidación Gas Natural:\nTotal Factura: ${this.formatMoney(this.gasResult.totalBill)}\n• Parte 1 (50%): ${this.formatMoney(this.gasResult.shareAmount)}\n• Parte 2 (50%): ${this.formatMoney(this.gasResult.shareAmount)}`;
+    }
+
+    if (text) {
+      navigator.clipboard.writeText(text).then(() => {
+        this.copiedService = type;
+        setTimeout(() => (this.copiedService = null), 2000);
+      });
+    }
   }
 }

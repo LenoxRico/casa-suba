@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, EventEmitter, inject, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CalculatorService } from '../../services/calculator.service';
 import { PropertyUnit } from '../../models/property.model';
@@ -12,6 +12,9 @@ import { PropertyUnit } from '../../models/property.model';
 })
 export class PropertyOverviewComponent {
   public calculatorService = inject(CalculatorService);
+
+  // Navigation Output to allow parent tab switching
+  @Output() navigateTab = new EventEmitter<string>();
 
   public units: PropertyUnit[] = [
     { id: 'local-1', name: 'Local Comercial 1', type: 'commercial', floor: 'Piso 1', defaultTenant: 'Local Comercial A' },
@@ -39,5 +42,13 @@ export class PropertyOverviewComponent {
 
   public formatMoney(amount: number): string {
     return this.calculatorService.formatCurrency(amount);
+  }
+
+  public goToCanon(): void {
+    this.navigateTab.emit('canon');
+  }
+
+  public goToUtilities(): void {
+    this.navigateTab.emit('utilities');
   }
 }

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CalculatorService } from '../../services/calculator.service';
@@ -10,16 +10,23 @@ import { CanonCalculation, PropertyUnit } from '../../models/property.model';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './canon-calculator.component.html',
-  styleUrl: './canon-calculator.component.scss',
+  styleUrl: './canon-calculator.component.scss'
 })
 export class CanonCalculatorComponent implements OnInit {
   private calculatorService = inject(CalculatorService);
   public ipcService = inject(IpcService);
 
+  // Navigation Output to allow parent tab switching
+  @Output() navigateTab = new EventEmitter<string>();
+
   // Form Inputs
-  public currentRent: number | null = 0;
+  public currentRent: number | null = 1200000;
   public saveIpcToStorage: boolean = true;
   public selectedUnitId: string = 'custom';
+
+  // Progressive Disclosure: Collapsible details state
+  public showDetails: boolean = false;
+  public copied: boolean = false;
 
   // Synchronized IPC Percentage property linked bi-directionally to IpcService signal
   public get ipcPercentage(): number {
@@ -41,7 +48,7 @@ export class CanonCalculatorComponent implements OnInit {
     { id: 'local-3', name: 'Local Comercial 3', type: 'commercial', floor: 'Piso 1' },
     { id: 'apto-2', name: 'Apartamento 2', type: 'residential', floor: 'Piso 2' },
     { id: 'apto-3', name: 'Apartamento 3', type: 'residential', floor: 'Piso 3' },
-    { id: 'apto-4', name: 'Apartamento 4', type: 'residential', floor: 'Piso 4' },
+    { id: 'apto-4', name: 'Apartamento 4', type: 'residential', floor: 'Piso 4' }
   ];
 
   // Output Result
@@ -50,6 +57,10 @@ export class CanonCalculatorComponent implements OnInit {
   ngOnInit(): void {
     // Auto calculate initial default values for rendering without saving to history
     this.calculate(false);
+  }
+
+  public toggleDetails(): void {
+    this.showDetails = !this.showDetails;
   }
 
   public onIpcChange(): void {
@@ -70,7 +81,7 @@ export class CanonCalculatorComponent implements OnInit {
     this.result = this.calculatorService.calculateCanon(
       this.currentRent,
       this.ipcPercentage,
-      saveHistory,
+      saveHistory
     );
   }
 
@@ -79,7 +90,20 @@ export class CanonCalculatorComponent implements OnInit {
   }
 
   public resetForm(): void {
-    this.currentRent = 0;
+    this.currentRent = 1200000;
     this.calculate(false);
+  }
+
+  public goToUtilities(): void {
+    this.navigateTab.emit('utilities');
+  }
+
+  public copySummary(): void {
+    if (!this.result) return;
+    const text = `Casa Suba - Canon de Arrendamiento:\nCanon Actual: ${this.formatMoney(this.result.currentRent)}\nIncremento IPC (${this.result.ipcPercentage}%): +${this.formatMoney(this.result.ipcDifference)}\nNuevo Canon a Pagar: ${this.formatMoney(this.result.newRent)}`;
+    navigator.clipboard.writeText(text).then(() => {
+      this.copied = true;
+      setTimeout(() => (this.copied = false), 2000);
+    });
   }
 }

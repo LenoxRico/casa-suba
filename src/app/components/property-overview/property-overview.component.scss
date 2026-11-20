@@ -205,6 +205,40 @@
   font-size: 0.875rem;
 }
 
+/* Step Navigation Footer */
+.step-nav-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+
+  .step-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.78rem;
+
+    .step-current {
+      color: var(--accent-purple);
+      font-weight: 700;
+    }
+
+    .step-name {
+      color: var(--text-muted);
+    }
+  }
+
+  .prev-step-btn,
+  .next-step-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+  }
+}
+
 @media (max-width: 868px) {
   .units-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -213,6 +247,22 @@
   .history-item {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .step-nav-footer {
+    flex-direction: column;
+    align-items: stretch;
+
+    .prev-step-btn,
+    .next-step-btn {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .step-indicator {
+      text-align: center;
+      justify-content: center;
+    }
   }
 }
 

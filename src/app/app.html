@@ -121,13 +121,13 @@
     <div class="tab-content-area">
       @switch (activeTab()) {
         @case ('canon') {
-          <app-canon-calculator></app-canon-calculator>
+          <app-canon-calculator (navigateTab)="setTab($event)"></app-canon-calculator>
         }
         @case ('utilities') {
-          <app-utilities-calculator></app-utilities-calculator>
+          <app-utilities-calculator (navigateTab)="setTab($event)"></app-utilities-calculator>
         }
         @case ('overview') {
-          <app-property-overview></app-property-overview>
+          <app-property-overview (navigateTab)="setTab($event)"></app-property-overview>
         }
       }
     </div>
